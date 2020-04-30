@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import PiuBox from '../components/piu'
-
+var width = Dimensions.get('window').width;
 export default function feed({ navigation }) {
   function navigateToProfile() {
     navigation.navigate('Profile');
   }
+  
   return <View style={styles.MainContainer}>
+    
     {/* barra de navegação superior */}
     <View style={styles.headerStyle}>
       <Image style={styles.logoStyle} source={require('./img/logo.png')} />
@@ -22,7 +24,7 @@ export default function feed({ navigation }) {
     </View>
 
     {/* conteudo da pag */}
-    <View style={styles.Container}>
+    <ScrollView style={styles.Container} showsVerticalScrollIndicator={false}>
 
       {/* novo piu */}
       <View style={styles.PiuContainer}>
@@ -39,31 +41,25 @@ export default function feed({ navigation }) {
       </View>
 
       {/* feed */}
-      <View style={styles.PiuContainer}>
-        <View style={{ flexDirection: 'row' }}>
-          <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
-          <View style={styles.piuContent}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.piuwerNome}>Nome</Text>
-              <Text>@Usuario</Text>
-            </View>
-            <View style={{flexDirection: 'row' }}>
-              <Text>conteudo do piu wstagbhnj ewfgtydhsanm wfet gsdayh</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-      <PiuBox name="usuario1" username='@username1' iconSource={require('./img/logo.png')}/>
-      <PiuBox name='usuario2' username='@username2' iconSource={require('./img/logo.png')}/>
-    </View>
+      <PiuBox name="Nome" username='@usuario' iconSource={require('./img/anonymous-icon.png')} mensagem='conteudo do piu wstagbhnj dhsanm wfet gsdayh'/>
+      <PiuBox name="usuario1" username='@username1' iconSource={require('./img/eu.jpg')} mensagem='oi'/>
+      <PiuBox name='usuario2' username='@username2' iconSource={require('./img/eu.jpg')} mensagem='testeee'/>
+      <PiuBox name="usuario1" username='@username1' iconSource={require('./img/eu.jpg')} mensagem='oi'/>
+      <PiuBox name='usuario2' username='@username2' iconSource={require('./img/eu.jpg')} mensagem='testeee'/>
+      <PiuBox name="usuario1" username='@username1' iconSource={require('./img/eu.jpg')} mensagem='penultmo'/>
+      <PiuBox name='usuario2' username='@username2' iconSource={require('./img/eu.jpg')} mensagem='ultimo'/>
+
+      {/* Mensagem do final */}
+      <Text style={styles.finalText}>Ops! Parece que não há mais nada por aqui</Text>
+    </ScrollView>
 
     {/* barra de navegação de baixo */}
     <View style={styles.navBottom}>
       <TouchableOpacity onPress={() => { console.log('home') }} >
-        {/* <Image style={styles.navBtn} source={require('./img/home-icon.png')} /> */}
+        <Image style={styles.navBtn} source={require('./img/home-icon.png')} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => { console.log('notificacoes') }}>
-        {/* <Image style={styles.navBtn} source={require('./img/notification-icon.png')} /> */}
+        <Image style={styles.navBtn} source={require('./img/notification-icon.png')} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => { console.log('novo piu') }} style={styles.piuBtn}>
         <Text style={styles.btnText}>Novo Piu</Text>
@@ -72,16 +68,20 @@ export default function feed({ navigation }) {
   </View>
 };
 
+
+
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1
   },
   headerStyle: {
-    height: 55,
+    height: 70,
     flexDirection: 'row',
     alignSelf: 'stretch',
     justifyContent: 'space-around',
-    marginVertical: 10,
+    paddingTop: 10,
+    paddingBottom:5,
+    marginBottom:5,
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
     alignItems: 'center',
@@ -125,7 +125,8 @@ const styles = StyleSheet.create({
 
   Container: {
     marginHorizontal: 20,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginBottom: 70,
   },
 
   PiuContainer: {
@@ -150,22 +151,10 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 
-  piuwerNome: {
-    fontWeight: 'bold',
-    marginHorizontal: 2,
-    fontSize: 15,
-  },
-
-  piuContent: {
-    marginLeft: 2,
-    flexWrap: 'wrap',
-    flex:1,
-  },
-
   navBottom: {
     height: 60,
     flexDirection: 'row',
-    width: 420,
+    width: width,
     justifyContent: 'space-around',
     paddingTop: 5,
     position: 'absolute',
@@ -192,8 +181,11 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'white',
     fontSize: 15,
+  },
+
+  finalText:{
+    fontSize:25,
+    alignSelf:'center',
+    textAlign:'center'
   }
-
-
-
 })

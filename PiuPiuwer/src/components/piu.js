@@ -6,12 +6,16 @@ const PiuBox = (props) =>{
         <View style={{ flexDirection: 'row' }}>
             <Image style={styles.iconStyle} source={props.iconSource} />
             <View style={styles.piuContent}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', alignItems:'center' }}>
                     <Text style={styles.piuwerNome}>{props.name}</Text>
                     <Text>{props.username}</Text>
                 </View>
                 <View style={{flexDirection: 'row' }}>
-                    <Text>conteudo do piu wstagbhnj ewfgtydhsanm wfet gsdayh</Text>
+                    <Text style={styles.piuText}>{props.mensagem}</Text>
+                </View>
+                <View>
+                  <Image/>
+                  <Image/>
                 </View>
             </View>
         </View>
@@ -21,15 +25,15 @@ const PiuBox = (props) =>{
 export default PiuBox;
 
 const styles = StyleSheet.create({
-
-PiuContainer: {
+  PiuContainer: {
     borderWidth: .5,
     borderColor: 'grey',
     borderRadius: 10,
     padding: 10,
     flexDirection: 'column',
     marginVertical: 5,
-},
+  },
+
   iconStyle: {
     height: 50,
     width: 50,
@@ -39,13 +43,17 @@ PiuContainer: {
 
   piuwerNome: {
     fontWeight: 'bold',
-    marginHorizontal: 2,
-    fontSize: 15,
+    fontSize: 18,
+    marginRight: 2,
   },
 
   piuContent: {
-    marginLeft: 2,
+    marginLeft: 10,
     flexWrap: 'wrap',
     flex:1,
   },
+
+  piuText:{
+    fontSize:18,
+  }
 })
