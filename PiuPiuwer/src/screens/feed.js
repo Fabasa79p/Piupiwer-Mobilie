@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import PiuBox from '../components/piu'
+import Navbar from '../components/navbar'
 var width = Dimensions.get('window').width;
+
 export default function feed({ navigation }) {
   function navigateToProfile() {
     navigation.navigate('Profile');
@@ -22,6 +24,7 @@ export default function feed({ navigation }) {
         </TouchableOpacity>
       </View>
     </View>
+    {/* <Navbar/> */}
 
     {/* conteudo da pag */}
     <ScrollView style={styles.Container} showsVerticalScrollIndicator={false}>
@@ -41,7 +44,7 @@ export default function feed({ navigation }) {
       </View>
 
       {/* feed */}
-      <PiuBox name="Nome" username='@usuario' iconSource={require('./img/anonymous-icon.png')} mensagem='conteudo do piu wstagbhnj dhsanm wfet gsdayh'/>
+      <PiuBox name="Renato" username='@usuario' iconSource={require('./img/anonymous-icon.png')} mensagem='conteudo do piu wstagbhnj dhsanm wfet gsdayh'/>
       <PiuBox name="usuario1" username='@username1' iconSource={require('./img/eu.jpg')} mensagem='oi'/>
       <PiuBox name='usuario2' username='@username2' iconSource={require('./img/eu.jpg')} mensagem='testeee'/>
       <PiuBox name="usuario1" username='@username1' iconSource={require('./img/eu.jpg')} mensagem='oi'/>
@@ -126,7 +129,6 @@ const styles = StyleSheet.create({
   Container: {
     marginHorizontal: 20,
     flexDirection: 'column',
-    marginBottom: 70,
   },
 
   PiuContainer: {
