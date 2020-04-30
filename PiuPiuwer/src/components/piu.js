@@ -1,28 +1,27 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 
-const PiuBox = (props) =>{
-    return <View style={styles.PiuContainer}>
-        <View style={{ flexDirection: 'row' }}>
-            <Image style={styles.iconStyle} source={props.iconSource} />
-            <View style={styles.piuContent}>
-                <View style={{ flexDirection: 'row', alignItems:'center' }}>
-                    <Text style={styles.piuwerNome}>{props.name}</Text>
-                    <Text>{props.username}</Text>
-                </View>
-                <View style={{flexDirection: 'row' }}>
-                    <Text style={styles.piuText}>{props.mensagem}</Text>
-                </View>
-                <View>
-                  <Image/>
-                  <Image/>
-                </View>
-            </View>
+export default function PiuBox(props) {
+  return <View style={styles.PiuContainer}>
+    <View style={{ flexDirection: 'row' }}>
+      <Image style={styles.iconStyle} source={props.iconSource} />
+      <View style={styles.piuContent}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.piuwerNome}>{props.name}</Text>
+          <Text>{props.username}</Text>
         </View>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.piuText}>{props.mensagem}</Text>
+        </View>
+        <View>
+          <Image />
+          <Image />
+        </View>
+      </View>
     </View>
+  </View>
 };
 
-export default PiuBox;
 
 const styles = StyleSheet.create({
   PiuContainer: {
@@ -50,10 +49,10 @@ const styles = StyleSheet.create({
   piuContent: {
     marginLeft: 10,
     flexWrap: 'wrap',
-    flex:1,
+    flex: 1,
   },
 
-  piuText:{
-    fontSize:18,
+  piuText: {
+    fontSize: 18,
   }
 })
