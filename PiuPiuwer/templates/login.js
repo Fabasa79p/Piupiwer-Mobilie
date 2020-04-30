@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity} from 'react-native';
 
 const Login = () => {
     return<View>
