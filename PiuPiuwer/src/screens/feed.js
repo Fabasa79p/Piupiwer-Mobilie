@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
+import PiuBox from '../components/piu'
 
 export default function feed({ navigation }) {
   function navigateToProfile() {
@@ -52,6 +53,8 @@ export default function feed({ navigation }) {
           </View>
         </View>
       </View>
+      <PiuBox name="usuario1" username='@username1' iconSource={require('./img/logo.png')}/>
+      <PiuBox name='usuario2' username='@username2' iconSource={require('./img/logo.png')}/>
     </View>
 
     {/* barra de navegação de baixo */}
