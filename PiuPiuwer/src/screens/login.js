@@ -5,6 +5,9 @@ export default function login({ navigation }) {
     function navigateToFeed() {
         navigation.navigate('Feed');
     }
+    function navigateToSingup() {
+        navigation.navigate('Signup');
+    }
     return <View>
         <View style={styles.headerStyle}>
             <Image style={styles.logoStyle} source={require('./img/logo.png')} />
@@ -24,6 +27,7 @@ export default function login({ navigation }) {
             <TouchableOpacity style={styles.loginButton} onPress={() => console.log('feed')}>
                 <Text style={styles.loginText} onPress={navigateToFeed}>Entrar</Text>
             </TouchableOpacity>
+            <Text style={styles.signupText} onPress={navigateToSingup}>Ainda não é um Piuwer? Cadastre-se agora</Text>
             {/* <Button title="Entrar" onPress={() => console.log('feed')} /> */}
         </View>
 
@@ -70,6 +74,12 @@ const styles = StyleSheet.create({
     loginText: {
         color: 'white',
         fontSize: 20,
+    },
+    signupText: {
+        textDecorationLine: 'underline',
+        color: '#5BC0EB',
+        padding: 3,
+        textAlign: "center",
     }
 
 })

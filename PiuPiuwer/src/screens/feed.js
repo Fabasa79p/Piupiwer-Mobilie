@@ -1,14 +1,17 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 
-const feed = () => {
+export default function feed({ navigation }) {
+  function navigateToProfile() {
+    navigation.navigate('Profile');
+  }
   return <View style={styles.MainContainer}>
     {/* barra de navegação superior */}
     <View style={styles.headerStyle}>
       <Image style={styles.logoStyle} source={require('./img/logo.png')} />
       <TextInput style={styles.containerText} placeholder="Procurando algo?" />
       <View style={styles.userOptions}>
-        <TouchableOpacity onPress={() => { console.log('perfil') }}>
+        <TouchableOpacity onPress={navigateToProfile}>
           <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { console.log('opcoes') }}>
@@ -190,5 +193,3 @@ const styles = StyleSheet.create({
 
 
 })
-
-export default feed;
