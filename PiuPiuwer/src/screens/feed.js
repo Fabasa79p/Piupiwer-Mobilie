@@ -8,9 +8,9 @@ export default function feed({ navigation }) {
   function navigateToProfile() {
     navigation.navigate('Profile');
   }
-  
+
   return <View style={styles.MainContainer}>
-    
+
     {/* barra de navegação superior */}
     <View style={styles.headerStyle}>
       <Image style={styles.logoStyle} source={require('./img/logo.png')} />
@@ -57,7 +57,7 @@ export default function feed({ navigation }) {
     </ScrollView>
 
     {/* barra de navegação de baixo */}
-    <View style={styles.navBottom}>
+    {/* <View style={styles.navBottom}>
       <TouchableOpacity onPress={() => { console.log('home') }} >
         <Image style={styles.navBtn} source={require('./img/home-icon.png')} />
       </TouchableOpacity>
@@ -67,7 +67,7 @@ export default function feed({ navigation }) {
       <TouchableOpacity onPress={() => { console.log('novo piu') }} style={styles.piuBtn}>
         <Text style={styles.btnText}>Novo Piu</Text>
       </TouchableOpacity>
-    </View>
+    </View> */}
   </View>
 };
 
@@ -83,8 +83,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     justifyContent: 'space-around',
     paddingTop: 10,
-    paddingBottom:5,
-    marginBottom:5,
+    paddingBottom: 5,
+    marginBottom: 5,
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
     alignItems: 'center',
@@ -185,9 +185,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-  finalText:{
-    fontSize:25,
-    alignSelf:'center',
-    textAlign:'center'
+  finalText: {
+    fontSize: 25,
+    alignSelf: 'center',
+    textAlign: 'center'
   }
 })

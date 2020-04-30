@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 
-const PiuBox = (props) =>{
+export default function PiuBox(props) {
     return <View style={styles.PiuContainer}>
         <View style={{ flexDirection: 'row', flex:1}}>
             <Image style={styles.iconStyle} source={props.iconSource} />
@@ -22,10 +22,9 @@ const PiuBox = (props) =>{
               :
                 <Image style={{alignSelf:'flex-end'}} source={require('../screens/img/like-icon.png')} />}
         </View>
-    </View>
+      </View>
 };
 
-export default PiuBox;
 
 const styles = StyleSheet.create({
   PiuContainer: {
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     
   },
 
-  piuText:{
-    fontSize:18,
+  piuText: {
+    fontSize: 18,
   }
 })
