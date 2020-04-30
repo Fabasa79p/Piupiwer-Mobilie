@@ -46,8 +46,8 @@ export default function feed({ navigation }) {
               <Text style={styles.piuwerNome}>Nome</Text>
               <Text>@Usuario</Text>
             </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ width: 300, flexWrap: 'wrap' }}>conteudo do piu wstagbhnj ewfgtydhsanm wfet gsdayh</Text>
+            <View style={{flexDirection: 'row' }}>
+              <Text>conteudo do piu wstagbhnj ewfgtydhsanm wfet gsdayh</Text>
             </View>
           </View>
         </View>
@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
 
   piuContent: {
     marginLeft: 2,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    flex:1,
   },
 
   navBottom: {
