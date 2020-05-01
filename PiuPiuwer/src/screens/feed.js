@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import PiuBox from '../components/piu'
-import Navbar from '../components/navbar'
-var width = Dimensions.get('window').width;
 
 export default function feed({ navigation }) {
   function navigateToProfile() {
@@ -20,10 +18,18 @@ export default function feed({ navigation }) {
           <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { console.log('opcoes') }}>
-          <Image style={styles.moreOptions} source={require('./img/moreoptions-icon.png')} />
+          <Image style={styles.moreOptions} source={require('./img/moreoptions-icon.png')}  />
         </TouchableOpacity>
       </View>
     </View>
+
+      <View style={styles.moreNav}>
+        <TouchableOpacity><Text style={styles.moreNavOption}>Perfil</Text></TouchableOpacity>
+        <TouchableOpacity><Text style={styles.moreNavOption}>Configurações</Text></TouchableOpacity>
+        <TouchableOpacity><Text style={styles.moreNavOption}>Ajuda</Text></TouchableOpacity>
+        <TouchableOpacity><Text style={[styles.moreNavOption, {color:'red'}]}>Sair</Text></TouchableOpacity>
+      </View>
+
     {/* <Navbar/> */}
 
     {/* conteudo da pag */}
@@ -90,6 +96,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  moreNav:{
+    position: 'absolute',
+    right:0,
+    marginRight:15,
+    marginTop:65,
+    backgroundColor:'whitesmoke',
+    zIndex: 1,
+    borderRadius: 12,
+  },
+
+  moreNavOption:{
+    fontSize:20,
+    paddingHorizontal:5,
+    borderBottomWidth:.5,
+    marginVertical:1,
+
+  },
+
   logoStyle: {
     height: 40,
     width: 50,
@@ -151,19 +175,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     bottom: 0,
-  },
-
-  navBottom: {
-    height: 60,
-    flexDirection: 'row',
-    width: width,
-    justifyContent: 'space-around',
-    paddingTop: 5,
-    position: 'absolute',
-    bottom: 0,
-    alignItems: 'center',
-    borderTopColor: 'grey',
-    borderTopWidth: 1,
   },
 
   navBtn: {

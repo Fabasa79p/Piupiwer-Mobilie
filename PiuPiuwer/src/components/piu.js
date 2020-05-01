@@ -16,11 +16,18 @@ export default function PiuBox(props) {
             </View>
               {props.name=='Renato'?
                 <View style={{alignSelf:'stretch', justifyContent:'space-between'}}>
-                  <Image source={require('../screens/img/arrow-icon.png')} />
-                  <Image source={require('../screens/img/like-icon.png')} />
+                  <TouchableOpacity>
+                    <Image source={require('../screens/img/bin-icon.png')} />
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <Image source={require('../screens/img/like-icon.png')} />
+                  </TouchableOpacity>
                 </View>
               :
-                <Image style={{alignSelf:'flex-end'}} source={require('../screens/img/like-icon.png')} />}
+                <TouchableOpacity style={{alignSelf:'flex-end'}}>
+                  <Image source={require('../screens/img/like-icon.png')} />
+                </TouchableOpacity>
+              }
         </View>
       </View>
 };
