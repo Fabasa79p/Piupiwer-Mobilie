@@ -23,13 +23,11 @@ export default function feed({ navigation }) {
         <TouchableOpacity onPress={navigateToProfile}>
           <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
         </TouchableOpacity>
-        <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}>
-              <Image style={styles.moreOptions}  source={require('../screens/img/moreoptions-icon.png')}  />
-        </TouchableOpacity>}>
-          <Menu.Item title='Home'/>
+        <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions}  source={require('../screens/img/moreoptions-icon.png')}  /></TouchableOpacity>}>
+          <Menu.Item onPress={navigateToProfile} title='Meu Perfil'/>
           <Menu.Item title='Ajuda'/>
           <Menu.Item title='Configurações'/>
-          <Menu.Item style={{fontColor:'red'}} title='Sair'/>
+          <Menu.Item title='Sair'/>
         </Menu>        
       </View>
     </View>
@@ -65,20 +63,6 @@ export default function feed({ navigation }) {
       {/* Mensagem do final */}
       <Text style={styles.finalText}>Ops! Parece que não há mais nada por aqui</Text>
     </ScrollView>
-
-    {/* barra de navegação de baixo */}
-    
-    {/* <View style={styles.navBottom}>
-      <TouchableOpacity onPress={() => { console.log('home') }} >
-        <Image style={styles.navBtn} source={require('./img/home-icon.png')} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => { console.log('notificacoes') }}>
-        <Image style={styles.navBtn} source={require('./img/notification-icon.png')} />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => { console.log('novo piu') }} style={styles.piuBtn}>
-        <Text style={styles.btnText}>Novo Piu</Text>
-      </TouchableOpacity>
-    </View> */}
   </View></Provider>
 };
 
