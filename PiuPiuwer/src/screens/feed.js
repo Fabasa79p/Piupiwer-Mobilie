@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import { Menu, Provider } from 'react-native-paper';
 import PiuBox from '../components/piu'
 
 export default function feed({ navigation }) {
@@ -7,8 +8,13 @@ export default function feed({ navigation }) {
     navigation.navigate('Profile');
   }
 
-  return <View style={styles.MainContainer}>
+  const [visible, setVisible] = useState(false)
 
+  const _openMenu =()=> setVisible(true);
+  const _closeMenu =()=> setVisible(false);
+
+  return <Provider>
+   <View style={styles.MainContainer}>
     {/* barra de navegação superior */}
     <View style={styles.headerStyle}>
       <Image style={styles.logoStyle} source={require('./img/logo.png')} />
@@ -17,18 +23,16 @@ export default function feed({ navigation }) {
         <TouchableOpacity onPress={navigateToProfile}>
           <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => { console.log('opcoes') }}>
-          <Image style={styles.moreOptions} source={require('./img/moreoptions-icon.png')}  />
-        </TouchableOpacity>
+        <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}>
+              <Image style={styles.moreOptions}  source={require('../screens/img/moreoptions-icon.png')}  />
+        </TouchableOpacity>}>
+          <Menu.Item title='Home'/>
+          <Menu.Item title='Ajuda'/>
+          <Menu.Item title='Configurações'/>
+          <Menu.Item style={{fontColor:'red'}} title='Sair'/>
+        </Menu>        
       </View>
     </View>
-
-      <View style={styles.moreNav}>
-        <TouchableOpacity><Text style={styles.moreNavOption}>Perfil</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.moreNavOption}>Configurações</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.moreNavOption}>Ajuda</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={[styles.moreNavOption, {color:'red'}]}>Sair</Text></TouchableOpacity>
-      </View>
 
     {/* <Navbar/> */}
 
@@ -63,6 +67,7 @@ export default function feed({ navigation }) {
     </ScrollView>
 
     {/* barra de navegação de baixo */}
+    
     {/* <View style={styles.navBottom}>
       <TouchableOpacity onPress={() => { console.log('home') }} >
         <Image style={styles.navBtn} source={require('./img/home-icon.png')} />
@@ -74,7 +79,7 @@ export default function feed({ navigation }) {
         <Text style={styles.btnText}>Novo Piu</Text>
       </TouchableOpacity>
     </View> */}
-  </View>
+  </View></Provider>
 };
 
 
