@@ -49,7 +49,7 @@ const FirstRoute = () => (
 );
 
 const SecondRoute = () => (
-    <ScrollView>
+    <ScrollView style={styles.piusContainer}>
         <PiuBox name="Renato" username='@renato' iconSource={require('./img/eu.jpg')} mensagem='oi' />
         <PiuBox name='Renato' username='@renato' iconSource={require('./img/eu.jpg')} mensagem='testeee' />
         <PiuBox name="Renato" username='@renato' iconSource={require('./img/eu.jpg')} mensagem='oi' />
@@ -108,6 +108,11 @@ const styles = StyleSheet.create({
 
     },
 
+    piusContainer:{
+        marginTop:15,
+        marginHorizontal:15,
+    },
+
     imageProfile: {
         height: 150,
         width: 150,
@@ -119,13 +124,12 @@ const styles = StyleSheet.create({
     },
     nameText: {
         alignSelf: "center",
-        padding: 5,
+        paddingTop: 5,
         fontSize: 24,
         fontWeight: "bold"
     },
     userText: {
         alignSelf: "center",
-        padding: 5,
         fontSize: 20,
     },
     scene: {
@@ -137,6 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'hsla(207, 60%, 44%, 0.85)',
         alignItems: 'center',
         padding: 5,
+        paddingHorizontal:15,
         borderRadius: 50
     },
     loginText: {
@@ -147,7 +152,9 @@ const styles = StyleSheet.create({
     aboutP: {
         flexDirection: "row",
         borderBottomColor: 'grey',
-        borderBottomWidth: .5,
+        borderBottomWidth: .3,
+        paddingLeft:10,
+        paddingVertical:5,
     },
     aboutTitle: {
         padding: 5,
@@ -157,6 +164,9 @@ const styles = StyleSheet.create({
     aboutText: {
         padding: 5,
         fontSize: 18,
+        flexWrap: 'wrap',
+        flex:1,
+        alignSelf:'stretch',
 
     }
 
