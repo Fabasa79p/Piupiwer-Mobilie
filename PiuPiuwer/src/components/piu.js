@@ -35,13 +35,14 @@ export default function PiuBox(props) {
 
 const styles = StyleSheet.create({
   PiuContainer: {
-    borderWidth: .5,
+    borderWidth: .4,
     borderColor: 'grey',
     borderRadius: 10,
     padding: 10,
     flexDirection: 'column',
     marginVertical: 5,
     flex:1,
+    backgroundColor:'hsla(0, 0%, 96%, .7)'
   },
 
   iconStyle: {

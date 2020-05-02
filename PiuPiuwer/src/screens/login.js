@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function login({ navigation }) {
     function navigateToFeed() {
@@ -8,7 +9,7 @@ export default function login({ navigation }) {
     function navigateToSingup() {
         navigation.navigate('Signup');
     }
-    return <View>
+    return <LinearGradient style={{flex:1}} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)', 'hsla(207, 55%, 62%, 0.4)']} >
         <View style={styles.headerStyle}>
             <Image style={styles.logoStyle} source={require('./img/logo.png')} />
             <Text style={styles.textStyle}>PiuPiuwer</Text>
@@ -32,7 +33,7 @@ export default function login({ navigation }) {
         </View>
 
 
-    </View>
+    </LinearGradient>
 };
 
 const styles = StyleSheet.create({
@@ -77,9 +78,10 @@ const styles = StyleSheet.create({
     },
     signupText: {
         textDecorationLine: 'underline',
-        color: '#5BC0EB',
+        color: '#1a9ad1',
         padding: 3,
         textAlign: "center",
+        fontSize: 15,
     }
 
 })

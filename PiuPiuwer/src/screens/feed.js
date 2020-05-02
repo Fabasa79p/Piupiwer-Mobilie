@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { Menu, Provider } from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
 import PiuBox from '../components/piu'
 
 export default function feed({ navigation }) {
@@ -14,7 +15,8 @@ export default function feed({ navigation }) {
   const _closeMenu =()=> setVisible(false);
 
   return <Provider>
-   <View style={styles.MainContainer}>
+   <LinearGradient style={{flex:1}} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
+
     {/* barra de navegação superior */}
     <View style={styles.headerStyle}>
       <Image style={styles.logoStyle} source={require('./img/logo.png')} />
@@ -63,15 +65,13 @@ export default function feed({ navigation }) {
       {/* Mensagem do final */}
       <Text style={styles.finalText}>Ops! Parece que não há mais nada por aqui</Text>
     </ScrollView>
-  </View></Provider>
+    </LinearGradient>
+  </Provider>
 };
 
 
 
 const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1
-  },
   headerStyle: {
     height: 70,
     flexDirection: 'row',
@@ -83,24 +83,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'grey',
     borderBottomWidth: 1,
     alignItems: 'center',
-  },
-
-  moreNav:{
-    position: 'absolute',
-    right:0,
-    marginRight:15,
-    marginTop:65,
-    backgroundColor:'whitesmoke',
-    zIndex: 1,
-    borderRadius: 12,
-  },
-
-  moreNavOption:{
-    fontSize:20,
-    paddingHorizontal:5,
-    borderBottomWidth:.5,
-    marginVertical:1,
-
   },
 
   logoStyle: {
@@ -188,6 +170,7 @@ const styles = StyleSheet.create({
   finalText: {
     fontSize: 25,
     alignSelf: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom:20,
   }
 })
