@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-community/async-storage'
+import jwt from "react-native-pure-jwt";
 // import { LogIn } from '../api/logintry'
 
 export default function login({ navigation }) {
@@ -42,7 +44,17 @@ export default function login({ navigation }) {
             console.log(data);
 
             if (!hasError(data)) {
+                storeData(data.token)
                 navigateToFeed()
+                // jwt.decode(
+                //     data.token, // the token
+                //     secret, // the secret
+                //     {
+                //     skipValidation: true // to skip signature and exp verification
+                //     }
+                // )
+                // .then((result)=>console.log(result)) // already an object. read below, exp key note
+                // .catch(console.error);
             }
 
             if (hasError(data)){
@@ -65,6 +77,16 @@ export default function login({ navigation }) {
             console.error(error);
         }
     }
+
+    const storeData = async (LoginToken) => {
+        try {
+          await AsyncStorage.setItem('token', LoginToken)
+        } catch (e) {
+          // saving error
+        }
+    }
+
+    
 
     return <LinearGradient style={{flex:1}} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)', 'hsla(207, 55%, 62%, 0.4)']} >
         <View style={styles.headerStyle}>
