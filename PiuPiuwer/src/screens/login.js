@@ -1,6 +1,7 @@
-import React from 'react';
-import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+// import { LogIn } from '../api/logintry'
 
 export default function login({ navigation }) {
     function navigateToFeed() {
@@ -9,6 +10,62 @@ export default function login({ navigation }) {
     function navigateToSingup() {
         navigation.navigate('Signup');
     }
+    const [user, setUser] = useState('');
+    const [senha, setSenha] = useState('');
+
+    function hasError(data) {
+        return !Object.keys(data).includes('token');
+    }
+    
+    async function LogIn(user, senha) {
+        console.log("Oi")
+        try {
+            let response = await fetch(
+                'http://piupiuwer.polijr.com.br/login/',
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'username': user,
+                        'password': senha,
+                    }),
+                },
+            );
+    
+            // Decodifica os dados para o formato json:
+            let data = await response.json();
+    
+            // Imprime os dados obtidos:
+            console.log(data);
+
+            if (!hasError(data)) {
+                navigateToFeed()
+            }
+
+            if (hasError(data)){
+                if(Object.keys(data).includes('password')){
+                    Alert.alert("O campo de senha não pode ficar em branco")
+                }
+                if(Object.keys(data).includes('username')){
+                    Alert.alert("O campo de usuário não pode ficar em branco")
+                }
+                if(Object.keys(data).includes('global')){
+                    Alert.alert("Impossível fazer login com as credenciais fornecidas")
+                }
+                if (!Object.keys(data).includes('global') && !Object.keys(data).includes('username') && !Object.keys(data).includes('password')){
+                    Alert.alert("Ocorreu um erro! Tente novamente")
+                }
+            }
+    
+        } catch (error) {
+            // Caso haja algum erro, imprima-o e retorne o erro:
+            console.error(error);
+        }
+    }
+
     return <LinearGradient style={{flex:1}} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)', 'hsla(207, 55%, 62%, 0.4)']} >
         <View style={styles.headerStyle}>
             <Image style={styles.logoStyle} source={require('./img/logo.png')} />
@@ -16,23 +73,27 @@ export default function login({ navigation }) {
         </View>
         <View>
             <View style={styles.formArea}>
-                <Text style={styles.containerText}>Usuário:</Text>
-                <TextInput style={styles.containerText} placeholder="Digite seu usuário" />
+                <Text style={styles.containerText} >Usuário:</Text>
+                <TextInput style={styles.containerText} placeholder="Digite seu usuário"
+                value={user} onChangeText={user => setUser(user)} />
+                {/* <Text>{user}</Text> */}
             </View>
+
             <View style={styles.formArea}>
                 <Text style={styles.containerText}>Senha:</Text>
-                <TextInput secureTextEntry={true} style={styles.containerText} placeholder="Digite sua senha" />
+                <TextInput secureTextEntry={true} style={styles.containerText} placeholder="Digite sua senha"
+                value={senha} onChangeText={senha => setSenha(senha)}
+                autoCapitalize='none' autoCorrect={false}/>
+                {/* <Text>{senha}</Text> */}
             </View>
         </View>
         <View>
-            <TouchableOpacity style={styles.loginButton} onPress={() => console.log('feed')}>
-                <Text style={styles.loginText} onPress={navigateToFeed}>Entrar</Text>
+            <TouchableOpacity style={styles.loginButton}  onPress={() => { LogIn(user, senha) }}>
+                <Text style={styles.loginText}>Entrar</Text>
             </TouchableOpacity>
             <Text style={styles.signupText} onPress={navigateToSingup}>Ainda não é um Piuwer? Cadastre-se agora</Text>
             {/* <Button title="Entrar" onPress={() => console.log('feed')} /> */}
         </View>
-
-
     </LinearGradient>
 };
 
