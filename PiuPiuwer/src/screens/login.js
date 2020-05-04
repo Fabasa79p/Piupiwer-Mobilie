@@ -46,6 +46,7 @@ export default function login({ navigation }) {
             if (!hasError(data)) {
                 storeData(data.token)
                 navigateToFeed()
+                // teste
                 // jwt.decode(
                 //     data.token, // the token
                 //     secret, // the secret
