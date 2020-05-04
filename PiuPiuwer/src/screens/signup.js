@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
-import users from '../api/users'
+import { signIn } from '../api/users'
+
 
 export default function signup({ navigation }) {
+    const [usuario, setUsuario] = useState('');
+    const [nome, setNome] = useState('');
+    const [sobrenome, setSobreome] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [sobre, setSobre] = useState('');
+
+
+
     function navigateToLogin() {
         navigation.navigate('Login');
     }
@@ -18,43 +28,46 @@ export default function signup({ navigation }) {
 
             <View>
                 <View style={styles.formArea}>
+                    <Text style={styles.containerText}>*Usuário:</Text>
+                    <TextInput style={styles.containerText} placeholder="Digite seu usuário" value={usuario} onChangeText={Usuario => setUsuario(Usuario)} />
+                </View>
+                <View style={styles.formArea}>
                     <Text style={styles.containerText}>*Nome:</Text>
-                    <TextInput style={styles.containerText} placeholder="Digite seu Nome" />
+                    <TextInput style={styles.containerText} placeholder="Digite seu Nome" value={nome} onChangeText={Nome => setNome(Nome)} />
                 </View>
                 <View style={styles.formArea}>
                     <Text style={styles.containerText}>*Sobrenome:</Text>
-                    <TextInput style={styles.containerText} placeholder="Digite seu Nome" />
-                </View>
-                <View style={styles.formArea}>
-                    <Text style={styles.containerText}>*Usuário:</Text>
-                    <TextInput style={styles.containerText} placeholder="Digite seu usuário" />
+                    <TextInput style={styles.containerText} placeholder="Digite seu Nome" value={sobrenome} onChangeText={Sobrenome => setSobreome(Sobrenome)} />
                 </View>
                 <View style={styles.formArea}>
                     <Text style={styles.containerText}>*E-mail:</Text>
-                    <TextInput style={styles.containerText} placeholder="Digite seu e-mail" />
+                    <TextInput style={styles.containerText} placeholder="Digite seu e-mail" value={email} onChangeText={Email => setEmail(Email)} />
                 </View>
                 <View style={styles.formArea}>
                     <Text style={styles.containerText}>*Senha:</Text>
-                    <TextInput secureTextEntry={true} style={styles.containerText} placeholder="Digite sua senha" />
+                    <TextInput secureTextEntry={true} style={styles.containerText} placeholder="Digite sua senha" value={senha} onChangeText={Senha => setSenha(Senha)} />
                 </View>
                 <View style={styles.formArea}>
                     <Text style={styles.containerText}>Sobre:</Text>
-                    <TextInput style={styles.containerText} placeholder="Fale um pouco sobre você" />
+                    <TextInput style={styles.containerText} placeholder="Fale um pouco sobre você" value={sobre} onChangeText={Sobre => setSobre(Sobre)} />
                 </View>
                 <View style={styles.formArea}>
                     <Text style={styles.containerText}>Foto de perfil:</Text>
-                    <TouchableOpacity style={styles.photoBtn}>
+                    {/* <TextInput style={styles.containerText} placeholder="Teste" /> */}
+                    {/* <TouchableOpacity style={styles.photoBtn}>
                         <Text>Escolher foto</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
+
+            {/* onPress={navigateToLogin} */}
             <View>
                 <TouchableOpacity style={styles.loginButton}>
-                    <Text style={styles.loginText} onPress={navigateToLogin}>Cadastrar</Text>
+                    <Text style={styles.loginText} onPress={() => { signIn(usuario, nome, sobrenome, email, senha, sobre, 'https://imgur.com/oHEA1HX') }}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
-    </LinearGradient>
+    </LinearGradient >
 };
 
 const styles = StyleSheet.create({
@@ -105,6 +118,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'hsla(207, 60%, 44%, 0.5)',
         alignItems: 'center',
         paddingVertical: 5,
+    },
+    warningText: {
+        color: '#F32013',
+
     }
 
 })
