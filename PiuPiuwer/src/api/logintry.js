@@ -3,10 +3,6 @@ import { Alert } from 'react-native';
 import jwt from "react-native-pure-jwt";
 import AsyncStorage from '@react-native-community/async-storage'
 
-function hasError(data) {
-    return !Object.keys(data).includes('token');
-}
-
 //guarda token
 const storeToken = async (LoginToken) => {
     try {
@@ -16,29 +12,6 @@ const storeToken = async (LoginToken) => {
       // saving error
     }
 }
-
-//guarda user
-const storeUser = async (LoggedUser) => {
-    try {
-      await AsyncStorage.setItem('usuarioLogado', LoggedUser)
-      console.log("Guardou usuario")
-    } catch (e) {
-      // saving error
-    }
-}
-
-//---verificação das variaveis guardadas
-// const retrieveData = async () => {
-//     try {
-//       const value = await AsyncStorage.getItem('usuarioLogado');
-//       if (value !== null) {
-//         // We have data!!
-//         console.log(value);
-//       }
-//     } catch (error) {
-//       // Error retrieving data
-//     }
-//   };
 
 //GET para pegar o username
 async function getUser(user){
@@ -60,8 +33,10 @@ async function getUser(user){
         // Decodifica os dados para o formato json:
         let dados = await response.json();
 
-        // Imprime os dados obtidos:
+        // Imprime os dados obtidos
         console.log(dados);
+
+        //chama função que salva o user
         storeUser(dados[0].username)
 
     }catch (error) {
@@ -70,11 +45,23 @@ async function getUser(user){
     }
 }
 
+//guarda user
+const storeUser = async (LoggedUser) => {
+    try {
+      await AsyncStorage.setItem('usuarioLogado', LoggedUser)
+      console.log("Guardou usuario")
+    } catch (e) {
+      // saving error
+    }
+}
+
 // valida o login ou não
 export async function LogIn(user, senha, {navigation} ) {
     function navigateToFeed() {
         navigation.navigate('Feed');
     }
+    if (user =='') return Alert.alert("O campo de usuário não deve ficar em branco")
+    if (senha =='') return Alert.alert("O campo de senha não deve ficar em branco")
     try {
         let response = await fetch(
             'http://piupiuwer.polijr.com.br/login/',
@@ -97,23 +84,15 @@ export async function LogIn(user, senha, {navigation} ) {
         console.log(data);
 
         //se não tem erro chama a funcao que guarda o usuario, guarda o token e faz a navergação pro feed
-        if (!hasError(data)) {
+        if (Object.keys(data).includes('token')) {
             getUser(user)
             storeToken(data.token)
             navigateToFeed()
         }
 
         //se tem erro aparece um alert indicando o erro
-        if (hasError(data)){
-            if(Object.keys(data).includes('password') || Object.keys(data).includes('username')){
-                Alert.alert("Os campos não podem ficar em branco")
-            }
-            if(Object.keys(data).includes('global')){
-                Alert.alert("Impossível fazer login com as credenciais fornecidas")
-            }
-            if (!Object.keys(data).includes('global') && !Object.keys(data).includes('username') && !Object.keys(data).includes('password')){
-                Alert.alert("Ocorreu um erro! Tente novamente")
-            }
+        if (!Object.keys(data).includes('token')){
+            Alert.alert("Usuário ou senha incorretos. Tente Novamente.")
         }
 
     } catch (error) {
@@ -121,4 +100,18 @@ export async function LogIn(user, senha, {navigation} ) {
         console.error(error);
     }
 }
+
+
+//---verificação das variaveis guardadas
+// const retrieveData = async () => {
+//     try {
+//       const value = await AsyncStorage.getItem('usuarioLogado');
+//       if (value !== null) {
+//         // We have data!!
+//         console.log(value);
+//       }
+//     } catch (error) {
+//       // Error retrieving data
+//     }
+//   };
 

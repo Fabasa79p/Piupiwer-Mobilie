@@ -4,9 +4,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LogIn } from '../api/logintry'
 
 export default function login({ navigation }) {
-    function navigateToFeed() {
-        navigation.navigate('Feed');
-    }
     function navigateToSingup() {
         navigation.navigate('Signup');
     }
