@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-picker';
 import { signIn } from '../api/users'
@@ -63,7 +63,7 @@ export default function signup({ navigation }) {
             {/* onPress={navigateToLogin} */}
             <View>
                 <TouchableOpacity style={styles.loginButton}>
-                    <Text style={styles.loginText} onPress={() => { signIn(usuario, nome, sobrenome, email, senha, sobre, 'https://imgur.com/oHEA1HX') }}>Cadastrar</Text>
+                    <Text style={styles.loginText} onPress={() => { signIn(usuario, nome, sobrenome, email, senha, sobre, { navigation }) }}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
