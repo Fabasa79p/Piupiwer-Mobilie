@@ -45,7 +45,7 @@ export async function signIn(usuario, nome, sobrenome, email, senha, sobre, { na
         console.log(data);
         // Erro
         if (!Object.keys(data).includes('id')) {
-            if (Object.keys(data).includes('email')) return Alert.alert('Erro com a Senha!', 'O email deve ser válido \n(example@example.com)!')
+            if (Object.keys(data).includes('email')) return Alert.alert('Erro com o Email!', 'O email deve ser válido \n(example@example.com)!')
             if (Object.keys(data).includes('username')) return Alert.alert('Erro com o Username!', 'O username já está em uso')
             return Alert.alert('Oops!', 'Algo está errado!')
         }
