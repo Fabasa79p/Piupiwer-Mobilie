@@ -3,6 +3,7 @@ import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, Touchable
 import { Menu, Provider } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import PiuBox from '../components/piu'
+import newPiu from '../api/newpiu'
 
 export default function feed({ navigation }) {
   function navigateToProfile() {
@@ -10,9 +11,10 @@ export default function feed({ navigation }) {
   }
 
   const [visible, setVisible] = useState(false)
-
   const _openMenu =()=> setVisible(true);
   const _closeMenu =()=> setVisible(false);
+
+  const [piuConteudo, setPiu] = useState('');
 
   return <Provider>
    <LinearGradient style={{flex:1}} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
@@ -43,13 +45,13 @@ export default function feed({ navigation }) {
       <View style={styles.PiuContainer}>
         <View style={{ flexDirection: 'row' }}>
           <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
-          <TextInput multiline={true} style={styles.newPiuInput} placeholder="Compartilhe um novo piu" />
+          <TextInput multiline={true} style={styles.newPiuInput} placeholder="Compartilhe um novo piu" value={piuConteudo} onChangeText={piuConteudo => setPiu(piuConteudo)}/>
         </View>
         <View style={styles.newPiuDetail}>
-          <Text>0/140</Text>
-          <TouchableOpacity onPress={() => { console.log('novo piu') }} style={[styles.piuBtn, { marginLeft: 10 }]}>
+          <Text>{piuConteudo.length}/140</Text>
+          {/* <TouchableOpacity onPress={() => { newPiu(nome, piuConteudo)}} style={[styles.piuBtn, { marginLeft: 10 }]}>
             <Text style={styles.btnText}>Piar</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
 

@@ -1,3 +1,10 @@
+
+// ---------------------------------DADOS GUARDADOS NO STORAGE-----------------------------
+// token como 'token'
+//user como 'usuarioLogado'
+//ID como 'idUsuario'
+
+
 import React from 'react';
 import { Alert } from 'react-native';
 import jwt from "react-native-pure-jwt";
@@ -37,7 +44,17 @@ async function getUser(user){
         console.log(dados);
 
         //chama função que salva o user
-        storeUser(dados[0].username)
+        for (i=0; i<dados.length; i++){
+            if (dados[i].username==userProcurado){
+                storeUser(dados[i].username, dados[i].id.toString())
+                
+            }
+        }
+        //para confirmação das variaveis guardadas
+        // retrieveUser()
+        // retrieveId()
+
+        
 
     }catch (error) {
             // Caso haja algum erro, imprima-o e retorne o erro:
@@ -46,10 +63,9 @@ async function getUser(user){
 }
 
 //guarda user
-const storeUser = async (LoggedUser) => {
+const storeUser = async (LoggedUser, idUsuario) => {
     try {
-      await AsyncStorage.setItem('usuarioLogado', LoggedUser)
-      console.log("Guardou usuario")
+      await AsyncStorage.multiSet([['usuarioLogado', LoggedUser], ['idUsuario', idUsuario]])
     } catch (e) {
       // saving error
     }
@@ -102,16 +118,30 @@ export async function LogIn(user, senha, {navigation} ) {
 }
 
 
-//---verificação das variaveis guardadas
-// const retrieveData = async () => {
+// ---verificação das variaveis guardadas
+// const retrieveUser = async () => {
 //     try {
 //       const value = await AsyncStorage.getItem('usuarioLogado');
 //       if (value !== null) {
 //         // We have data!!
+//         console.log("Usuario guardado")
 //         console.log(value);
 //       }
 //     } catch (error) {
 //       // Error retrieving data
 //     }
 //   };
+
+// const retrieveId = async () => {
+//     try {
+//       const value = await AsyncStorage.getItem('idUsuario');
+//       if (value !== null) {
+//         // We have data!!
+//         console.log("ID guardado")
+//         console.log(value);
+//       }
+//     } catch (error) {
+//       // Error retrieving data
+//     }
+// };
 
