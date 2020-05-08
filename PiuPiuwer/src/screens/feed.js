@@ -3,9 +3,12 @@ import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, Touchable
 import { Menu, Provider } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import PiuBox from '../components/piu'
-import newPiu from '../api/newpiu'
+import {newPiu} from '../api/newpiu'
+import AsyncStorage from '@react-native-community/async-storage'
+
 
 export default function feed({ navigation }) {
+  console.log("Oi")
   function navigateToProfile() {
     navigation.navigate('Profile');
   }
@@ -13,7 +16,6 @@ export default function feed({ navigation }) {
   const [visible, setVisible] = useState(false)
   const _openMenu =()=> setVisible(true);
   const _closeMenu =()=> setVisible(false);
-
   const [piuConteudo, setPiu] = useState('');
 
   return <Provider>
@@ -42,16 +44,19 @@ export default function feed({ navigation }) {
     <ScrollView style={styles.Container} showsVerticalScrollIndicator={false}>
 
       {/* novo piu */}
+      {piuConteudo.length>140 ? <Text style={{color:'red', fontSize: 16}}>O piu não pode conter mais do que 140 caracteres!</Text>
+      : null
+      }
       <View style={styles.PiuContainer}>
         <View style={{ flexDirection: 'row' }}>
           <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
-          <TextInput multiline={true} style={styles.newPiuInput} placeholder="Compartilhe um novo piu" value={piuConteudo} onChangeText={piuConteudo => setPiu(piuConteudo)}/>
+          <TextInput multiline={true} style={[styles.newPiuInput, { color: piuConteudo.length>140 ? 'red' : 'black' }]} placeholder="Compartilhe um novo piu" value={piuConteudo} onChangeText={piuConteudo => setPiu(piuConteudo)}/>
         </View>
         <View style={styles.newPiuDetail}>
-          <Text>{piuConteudo.length}/140</Text>
-          {/* <TouchableOpacity onPress={() => { newPiu(nome, piuConteudo)}} style={[styles.piuBtn, { marginLeft: 10 }]}>
+          <Text style={{ color: piuConteudo.length>140 ? 'red' : 'black' }}>{piuConteudo.length}/140</Text>
+          <TouchableOpacity disabled={ piuConteudo.length==0 ? true : piuConteudo.length>140 ? true : false} onPress={() => { newPiu(piuConteudo) }} style={[styles.piuBtn, { marginLeft: 10, opacity: piuConteudo.length==0 ? 0.7 : piuConteudo.length>140 ? 0.7 : 1 }]}>
             <Text style={styles.btnText}>Piar</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -139,8 +144,10 @@ const styles = StyleSheet.create({
 
   newPiuInput: {
     width: 300,
-    maxHeight: 90,
-    flexWrap: 'wrap'
+    maxHeight: 100,
+    flexWrap: 'wrap',
+    fontSize:16,
+    marginLeft:10,
   },
 
   newPiuDetail: {

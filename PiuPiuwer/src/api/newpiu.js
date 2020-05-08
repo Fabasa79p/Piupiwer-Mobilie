@@ -1,7 +1,10 @@
 import React from 'react';
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
 
-export async function newPiu(usuario, textoPiu) {
+export async function newPiu(textoPiu) {
+    console.log("Cheguei aqui")
+    const idUsuario = await AsyncStorage.getItem('idUsuario');
     try {
         let response = await fetch(
             'http://piupiuwer.polijr.com.br/pius/',
@@ -12,7 +15,7 @@ export async function newPiu(usuario, textoPiu) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    'usuario': usuario,
+                    'usuario': idUsuario,
                     'texto': textoPiu,
                 }),
             },
@@ -23,8 +26,6 @@ export async function newPiu(usuario, textoPiu) {
 
         // Imprime os dados obtidos:
         console.log(data);
-        
-        Alert.alert('Sucesso!', 'Você agora é um Piuwer!')
 
     } catch (error) {
         console.error(error);

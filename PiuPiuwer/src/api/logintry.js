@@ -4,7 +4,6 @@
 //user como 'usuarioLogado'
 //ID como 'idUsuario'
 
-
 import React from 'react';
 import { Alert } from 'react-native';
 import jwt from "react-native-pure-jwt";
@@ -46,16 +45,9 @@ async function getUser(user){
         //chama função que salva o user
         for (i=0; i<dados.length; i++){
             if (dados[i].username==userProcurado){
-                storeUser(dados[i].username, dados[i].id.toString())
-                
+                return dados[i] 
             }
         }
-        //para confirmação das variaveis guardadas
-        // retrieveUser()
-        // retrieveId()
-
-        
-
     }catch (error) {
             // Caso haja algum erro, imprima-o e retorne o erro:
             console.error(error);
@@ -101,8 +93,12 @@ export async function LogIn(user, senha, {navigation} ) {
 
         //se não tem erro chama a funcao que guarda o usuario, guarda o token e faz a navergação pro feed
         if (Object.keys(data).includes('token')) {
-            getUser(user)
-            storeToken(data.token)
+            dadosUsuario = await getUser(user)
+            console.log(dadosUsuario)
+            await storeToken(data.token)
+            await storeUser(dadosUsuario.username, dadosUsuario.id.toString())
+            await retrieveUser()
+            await retrieveId()
             navigateToFeed()
         }
 
@@ -119,29 +115,29 @@ export async function LogIn(user, senha, {navigation} ) {
 
 
 // ---verificação das variaveis guardadas
-// const retrieveUser = async () => {
-//     try {
-//       const value = await AsyncStorage.getItem('usuarioLogado');
-//       if (value !== null) {
-//         // We have data!!
-//         console.log("Usuario guardado")
-//         console.log(value);
-//       }
-//     } catch (error) {
-//       // Error retrieving data
-//     }
-//   };
+const retrieveUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('usuarioLogado');
+      if (value !== null) {
+        // We have data!!
+        console.log("Usuario guardado")
+        console.log(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
 
-// const retrieveId = async () => {
-//     try {
-//       const value = await AsyncStorage.getItem('idUsuario');
-//       if (value !== null) {
-//         // We have data!!
-//         console.log("ID guardado")
-//         console.log(value);
-//       }
-//     } catch (error) {
-//       // Error retrieving data
-//     }
-// };
+const retrieveId = async () => {
+    try {
+      const value = await AsyncStorage.getItem('idUsuario');
+      if (value !== null) {
+        // We have data!!
+        console.log("ID guardado")
+        console.log(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+};
 
