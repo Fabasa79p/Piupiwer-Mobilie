@@ -2,34 +2,34 @@ import React from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 
 export default function PiuBox(props) {
-    return <View style={styles.PiuContainer}>
-        <View style={{ flexDirection: 'row', flex:1}}>
-            <Image style={styles.iconStyle} source={props.iconSource} />
-            <View style={styles.piuContent}>
-                <View style={{ flexDirection: 'row', alignItems:'center' }}>
-                    <Text style={styles.piuwerNome}>{props.name}</Text>
-                    <Text>{props.username}</Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                    <Text style={styles.piuText}>{props.mensagem}</Text>
-                </View>
-            </View>
-              {props.name=='Renato'?
-                <View style={{alignSelf:'stretch', justifyContent:'space-between'}}>
-                  <TouchableOpacity>
-                    <Image source={require('../screens/img/bin-icon.png')} />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image source={require('../screens/img/like-icon.png')} />
-                  </TouchableOpacity>
-                </View>
-              :
-                <TouchableOpacity style={{alignSelf:'flex-end'}}>
-                  <Image source={require('../screens/img/like-icon.png')} />
-                </TouchableOpacity>
-              }
+  return <View style={styles.PiuContainer}>
+    <View style={{ flexDirection: 'row', flex: 1 }}>
+      <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
+      <View style={styles.piuContent}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.piuwerNome}>{props.name}</Text>
+          <Text>{props.username}</Text>
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.piuText}>{props.mensagem}</Text>
         </View>
       </View>
+      {props.name == 'Renato' ?
+        <View style={{ alignSelf: 'stretch', justifyContent: 'space-between' }}>
+          <TouchableOpacity>
+            <Image source={require('../screens/img/bin-icon.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={require('../screens/img/like-icon.png')} />
+          </TouchableOpacity>
+        </View>
+        :
+        <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+          <Image source={require('../screens/img/like-icon.png')} />
+        </TouchableOpacity>
+      }
+    </View>
+  </View>
 };
 
 
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'column',
     marginVertical: 5,
-    flex:1,
-    backgroundColor:'hsla(0, 0%, 96%, .7)'
+    flex: 1,
+    backgroundColor: 'hsla(0, 0%, 96%, .7)'
   },
 
   iconStyle: {
@@ -61,9 +61,9 @@ const styles = StyleSheet.create({
   piuContent: {
     marginLeft: 10,
     flexWrap: 'wrap',
-    flex:1,
-    alignSelf:'stretch',
-    
+    flex: 1,
+    alignSelf: 'stretch',
+
   },
 
   piuText: {

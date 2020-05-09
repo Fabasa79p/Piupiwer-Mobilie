@@ -6,15 +6,6 @@
 // }
 import AsyncStorage from '@react-native-community/async-storage'
 
-// const storePius = async (data) => {
-//     try {
-//         await AsyncStorage.setItem('listPius', data)
-//         await console.log("Guardou os Pius")
-//     } catch (e) {
-//         // saving error
-//     }
-// }
-
 export async function loadPius() {
     try {
         let response = await fetch(
@@ -30,8 +21,6 @@ export async function loadPius() {
 
         // Decodifica os dados para o formato json:
         let data = await response.json();
-        console.log(data[0].texto)
-
         // Imprime os dados obtidos:
         return await data;
 
