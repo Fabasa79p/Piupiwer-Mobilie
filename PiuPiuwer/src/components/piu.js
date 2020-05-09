@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default function PiuBox(props) {
+  const [usuarioLogado, setUsuario] = useState({data: null, loaded: false})
+  async function getUsuario() {
+    const value = await AsyncStorage.getItem('usuarioLogado');
+    setUsuario({data: value, loaded: true});
+  }
+
+  if (usuarioLogado.data == null) {
+    getUsuario()
+  }
+
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
       <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
@@ -14,7 +25,8 @@ export default function PiuBox(props) {
           <Text style={styles.piuText}>{props.mensagem}</Text>
         </View>
       </View>
-      {props.name == 'Renato' ?
+      {console.log(usuarioLogado.data)}
+      {props.username == usuarioLogado.data ?
         <View style={{ alignSelf: 'stretch', justifyContent: 'space-between' }}>
           <TouchableOpacity>
             <Image source={require('../screens/img/bin-icon.png')} />
