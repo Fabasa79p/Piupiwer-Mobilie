@@ -60,7 +60,7 @@ export default function feed({ navigation }) {
         data={pius.data}
         renderItem={({ item }) => {
           // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={` @${item.usuario.username}`} iconSource={item.usuario.foto} mensagem={item.texto} />
+          return <PiuBox id={item.id} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={` @${item.usuario.username}`} iconSource={item.usuario.foto} mensagem={item.texto} />
         }}
       />
     );
