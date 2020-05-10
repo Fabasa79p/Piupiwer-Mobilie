@@ -121,6 +121,12 @@ export default function feed({ navigation }) {
     );
   }
 
+  async function novoPiuFuncoes(piuConteudo){
+    await newPiu(piuConteudo)
+    setPiu('')
+    loadPiusData()
+  }
+
   return (
     <Provider>
       <LinearGradient style={{ flex: 1 }} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
@@ -157,7 +163,7 @@ export default function feed({ navigation }) {
           </View>
           <View style={styles.newPiuDetail}>
             <Text style={{ color: piuConteudo.length > 140 ? 'red' : 'black' }}>{piuConteudo.length}/140</Text>
-            <TouchableOpacity disabled={piuConteudo.length == 0 ? true : piuConteudo.length > 140 ? true : false} onPress={() => { newPiu(piuConteudo), setPiu('') }} style={[styles.piuBtn, { marginLeft: 10, opacity: piuConteudo.length == 0 ? 0.7 : piuConteudo.length > 140 ? 0.7 : 1 }]}>
+            <TouchableOpacity disabled={piuConteudo.length == 0 ? true : piuConteudo.length > 140 ? true : false} onPress={() => { novoPiuFuncoes(piuConteudo) }} style={[styles.piuBtn, { marginLeft: 10, opacity: piuConteudo.length == 0 ? 0.7 : piuConteudo.length > 140 ? 0.7 : 1 }]}>
               <Text style={styles.btnText}>Piar</Text>
             </TouchableOpacity>
           </View>
