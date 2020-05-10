@@ -1,20 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
 import { deletePiu } from '../api/deletePiu'
+import { likePiu } from '../api/likePiu'
 
 export default function PiuBox(props) {
-  const [usuarioLogado, setUsuario] = useState({data: null, loaded: false})
+
+  const [usuarioLogado, setUsuario] = useState({ data: null, loaded: false })
   async function getUsuario() {
     const value = await AsyncStorage.getItem('usuarioLogado');
-    setUsuario({data: value, loaded: true});
+    setUsuario({ data: value, loaded: true });
   }
 
   if (usuarioLogado.data == null) {
     getUsuario()
   }
+  const [liked, setLiked] = useState({ status: false })
+  if (props.likeStatus) {
+    useEffect(() => { setLiked({ status: true }) }, [])
+  }
+  function toggleLike() {
+    setLiked({ status: !liked.status })
+  }
 
-  {console.log("Passei aqui")}
+
+  function likeHandler() {
+    likePiu(props.id, props.id_usuario);
+    toggleLike();
+
+  }
+
 
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -22,30 +37,41 @@ export default function PiuBox(props) {
       <View style={styles.piuContent}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.piuwerNome}>{props.name}</Text>
-          <Text>{props.username}</Text>
+          <Text> @{props.username}</Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.piuText}>{props.mensagem}</Text>
         </View>
       </View>
-      {console.log(props.id)}
-      {props.username == ` @${usuarioLogado.data}` ?
+      {props.username == usuarioLogado.data ?
         <View style={{ alignSelf: 'stretch', justifyContent: 'space-between' }}>
           <TouchableOpacity onPress={() => { deletePiu(props.id) }}>
             <Image source={require('../screens/img/bin-icon.png')} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={require('../screens/img/like-icon.png')} />
+          <TouchableOpacity onPress={() => { likeHandler(); }}>
+            {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
+
           </TouchableOpacity>
         </View>
         :
-        <TouchableOpacity style={{ alignSelf: 'flex-end' }}>
-          <Image source={require('../screens/img/like-icon.png')} />
+        <TouchableOpacity onPress={() => { likeHandler(); }}>
+          {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
+
         </TouchableOpacity>
       }
     </View>
   </View>
 };
+
+
+
+
+
+
+
+
+
+
 
 
 const styles = StyleSheet.create({

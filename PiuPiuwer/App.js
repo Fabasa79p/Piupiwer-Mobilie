@@ -5,6 +5,10 @@ import { NavigationNativeContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 
 export default function PiuPiuwer() {
+
+  // ignora warnings
+  console.disableYellowBox = true;
+
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" />

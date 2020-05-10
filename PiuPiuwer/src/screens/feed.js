@@ -13,17 +13,58 @@ export default function feed({ navigation }) {
     data: null,
     loaded: false,
   });
+  const [usuarioLogado, setUsuarioLogado] = useState({
+    data: null,
+    loaded: false,
+  });
+
+  const [usuarioID, setUsuarioID] = useState({
+    data: null,
+    loaded: false,
+  });
+
+  const [token, setToken] = useState({
+    data: null,
+    loaded: false,
+  });
+
 
   async function loadPiusData() {
     const pius = await loadPius();
-    console.log(pius);
+    // console.log(pius);
     setPius({
       data: pius,
       loaded: true,
     });
   }
+  async function retrieveUser() {
+    const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
+    // console.log(usuarioLogado)
+    setUsuarioLogado({
+      data: usuarioLogado,
+      loaded: true,
+    });
+  }
 
-  // loadPiusData();
+  async function retrieveID() {
+    const usuarioID = await AsyncStorage.getItem('idUsuario');
+    // console.log(usuarioID)
+    setUsuarioID({
+      data: usuarioID,
+      loaded: true,
+    });
+  }
+
+  async function retrieveToken() {
+    const token = await AsyncStorage.getItem('token');
+    // console.log(token)
+    setToken({
+      data: token,
+      loaded: true,
+    });
+  }
+
+
 
   function navigateToProfile() {
     navigation.navigate('Profile');
@@ -35,8 +76,12 @@ export default function feed({ navigation }) {
   const [piuConteudo, setPiu] = useState('');
 
   function piusArea() {
-    if (pius.data == null) {
+    if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
       if (!pius.loaded) loadPiusData();
+      if (!usuarioLogado.loaded) retrieveUser();
+      if (!usuarioID.loaded) retrieveID();
+      if (!token.loaded) retrieveToken();
+
       return (
         <View style={{
           flex: 1,
@@ -59,8 +104,18 @@ export default function feed({ navigation }) {
       <FlatList
         data={pius.data}
         renderItem={({ item }) => {
+          let liked = false
+          item.likers.forEach(liker => {
+            if (liker.username == usuarioLogado.data) {
+              console.log('Usuario ja curtiu');
+              liked = true;
+
+
+            }
+
+          });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox id={item.id} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={` @${item.usuario.username}`} iconSource={item.usuario.foto} mensagem={item.texto} />
+          return <PiuBox id={item.id} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} />
         }}
       />
     );
@@ -68,28 +123,28 @@ export default function feed({ navigation }) {
 
   return (
     <Provider>
-    <LinearGradient style={{ flex: 1 }} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
+      <LinearGradient style={{ flex: 1 }} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
 
-      {/* barra de navegação superior */}
-      <View style={styles.headerStyle}>
-        <Image style={styles.logoStyle} source={require('./img/logo.png')} />
-        <TextInput style={styles.containerText} placeholder="Procurando algo?" />
-        <View style={styles.userOptions}>
-          <TouchableOpacity onPress={navigateToProfile}>
-            <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
-          </TouchableOpacity>
-          <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>
-            <Menu.Item onPress={navigateToProfile} title='Meu Perfil' />
-            <Menu.Item title='Ajuda' />
-            <Menu.Item title='Configurações' />
-            <Menu.Item title='Sair' />
-          </Menu>
+        {/* barra de navegação superior */}
+        <View style={styles.headerStyle}>
+          <Image style={styles.logoStyle} source={require('./img/logo.png')} />
+          <TextInput style={styles.containerText} placeholder="Procurando algo?" />
+          <View style={styles.userOptions}>
+            <TouchableOpacity onPress={navigateToProfile}>
+              <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
+            </TouchableOpacity>
+            <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>
+              <Menu.Item onPress={navigateToProfile} title='Meu Perfil' />
+              <Menu.Item title='Ajuda' />
+              <Menu.Item title='Configurações' />
+              <Menu.Item title='Sair' />
+            </Menu>
+          </View>
         </View>
-      </View>
 
-      {/* <Navbar/> */}
+        {/* <Navbar/> */}
 
-      {/* conteudo da pag */}
+        {/* conteudo da pag */}
 
         {/* novo piu */}
         {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16 }}>O piu não pode conter mais do que 140 caracteres!</Text>
@@ -110,13 +165,13 @@ export default function feed({ navigation }) {
 
         {/* feed */}
         <View style={{ flex: 1 }}>
-              {piusArea()}
+          {piusArea()}
         </View>
 
         {/* Mensagem do final
         <Text style={styles.finalText}>Ops! Parece que não há mais nada por aqui</Text> */}
-    </LinearGradient>
-  </Provider>
+      </LinearGradient>
+    </Provider>
   );
 };
 
