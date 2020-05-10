@@ -107,7 +107,6 @@ export default function feed({ navigation }) {
           let liked = false
           item.likers.forEach(liker => {
             if (liker.username == usuarioLogado.data) {
-              console.log('Usuario ja curtiu');
               liked = true;
 
 
