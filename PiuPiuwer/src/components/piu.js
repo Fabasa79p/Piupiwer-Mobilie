@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
 import { deletePiu } from '../api/deletePiu'
+import { loadPius } from '../api/loadPius'
 
 export default function PiuBox(props) {
   const [usuarioLogado, setUsuario] = useState({data: null, loaded: false})
@@ -14,7 +15,17 @@ export default function PiuBox(props) {
     getUsuario()
   }
 
-  {console.log("Passei aqui")}
+  async function loadPiusData() {
+    const pius = await loadPius();
+    console.log("Passei aqui")
+    console.log(pius);
+  }
+
+  async function deletePiuFunctions(deleteId){
+    await deletePiu(deleteId)
+    console.log("Ei")
+    loadPiusData()
+  }
 
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -28,10 +39,9 @@ export default function PiuBox(props) {
           <Text style={styles.piuText}>{props.mensagem}</Text>
         </View>
       </View>
-      {console.log(props.id)}
       {props.username == ` @${usuarioLogado.data}` ?
         <View style={{ alignSelf: 'stretch', justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={() => { deletePiu(props.id) }}>
+          <TouchableOpacity onPress={() => { deletePiuFunctions(props.id) }}>
             <Image source={require('../screens/img/bin-icon.png')} />
           </TouchableOpacity>
           <TouchableOpacity>

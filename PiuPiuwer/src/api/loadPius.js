@@ -7,6 +7,7 @@
 import AsyncStorage from '@react-native-community/async-storage'
 
 export async function loadPius() {
+    console.log("Fiz o fetch de novo")
     try {
         let response = await fetch(
             'http://piupiuwer.polijr.com.br/pius/',
