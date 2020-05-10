@@ -11,7 +11,7 @@ export default function PiuPiuwer() {
 
   return (
     <NavigationContainer>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor="hsla(207, 60%, 44%, 0.85)" />
       <Routes />
     </NavigationContainer>
   );
