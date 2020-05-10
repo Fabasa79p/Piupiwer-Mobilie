@@ -104,6 +104,7 @@ export default function feed({ navigation }) {
       <FlatList
         data={pius.data}
         renderItem={({ item }) => {
+
           let liked = false
           item.likers.forEach(liker => {
             if (liker.username == usuarioLogado.data) {
@@ -114,7 +115,7 @@ export default function feed({ navigation }) {
 
           });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox id={item.id} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} />
+          return <PiuBox id={item.id} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} />
         }}
       />
     );

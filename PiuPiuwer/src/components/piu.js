@@ -15,12 +15,21 @@ export default function PiuBox(props) {
   if (usuarioLogado.data == null) {
     getUsuario()
   }
-  const [liked, setLiked] = useState({ status: false })
+  const [liked, setLiked] = useState({ status: false, initialCounter: props.counter, alreadyLiked: false })
   if (props.likeStatus) {
-    useEffect(() => { setLiked({ status: true }) }, [])
+    useEffect(() => { setLiked({ status: true, initialCounter: props.counter, alreadyLiked: true }) }, [])
   }
   function toggleLike() {
-    setLiked({ status: !liked.status })
+    if (liked.alreadyLiked) {
+      if (liked.status) { setLiked({ status: false, initialCounter: props.counter - 1 }) }
+      if (!liked.status) { setLiked({ status: true, initialCounter: props.counter }) }
+    }
+    if (!liked.alreadyLiked) {
+      if (liked.status) { setLiked({ status: false, initialCounter: props.counter }) }
+      if (!liked.status) { setLiked({ status: true, initialCounter: props.counter + 1 }) }
+    }
+
+
   }
 
 
@@ -54,8 +63,9 @@ export default function PiuBox(props) {
           </TouchableOpacity>
         </View>
         :
-        <TouchableOpacity onPress={() => { likeHandler(); }}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'flex-end' }} onPress={() => { likeHandler(); }}>
           {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
+          <Text style={styles.piuText}>{liked.initialCounter}</Text>
 
         </TouchableOpacity>
       }
