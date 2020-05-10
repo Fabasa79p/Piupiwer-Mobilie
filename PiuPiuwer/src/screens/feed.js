@@ -6,6 +6,7 @@ import PiuBox from '../components/piu'
 import { newPiu } from '../api/newpiu'
 import AsyncStorage from '@react-native-community/async-storage'
 import { loadPius } from '../api/loadPius'
+import { deletePiu } from '../api/deletePiu'
 
 
 export default function feed({ navigation }) {
@@ -31,7 +32,7 @@ export default function feed({ navigation }) {
 
   async function loadPiusData() {
     const pius = await loadPius();
-    // console.log(pius);
+    console.log(pius);
     setPius({
       data: pius,
       loaded: true,
@@ -75,6 +76,13 @@ export default function feed({ navigation }) {
   const _closeMenu = () => setVisible(false);
   const [piuConteudo, setPiu] = useState('');
 
+  async function deletePiuFuncoes(piuId){
+    await deletePiu(piuId)
+    console.log("passou aqui")
+    loadPiusData()
+  }
+
+
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
       if (!pius.loaded) loadPiusData();
@@ -115,7 +123,7 @@ export default function feed({ navigation }) {
 
           });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox id={item.id} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} />
+          return <PiuBox  id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} />
         }}
       />
     );
