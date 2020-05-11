@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import { Menu, Provider } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import PiuBox from '../components/piu'
@@ -32,7 +32,7 @@ export default function feed({ navigation }) {
 
   async function loadPiusData() {
     const pius = await loadPius();
-    console.log(pius);
+    // console.log(pius);
     setPius({
       data: pius,
       loaded: true,
@@ -68,7 +68,7 @@ export default function feed({ navigation }) {
 
 
   function navigateToProfile() {
-    navigation.navigate('Profile');
+    navigation.navigate('Profile', { id: usuarioID.data })
   }
 
   const [visible, setVisible] = useState(false)
@@ -76,9 +76,9 @@ export default function feed({ navigation }) {
   const _closeMenu = () => setVisible(false);
   const [piuConteudo, setPiu] = useState('');
 
-  async function deletePiuFuncoes(piuId){
+  async function deletePiuFuncoes(piuId) {
     await deletePiu(piuId)
-    console.log("passou aqui")
+    // console.log("passou aqui")
     loadPiusData()
   }
 
@@ -123,13 +123,13 @@ export default function feed({ navigation }) {
 
           });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox  id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} />
+          return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} navigation={navigation} />
         }}
       />
     );
   }
 
-  async function novoPiuFuncoes(piuConteudo){
+  async function novoPiuFuncoes(piuConteudo) {
     await newPiu(piuConteudo)
     setPiu('')
     loadPiusData()
@@ -144,7 +144,7 @@ export default function feed({ navigation }) {
           <Image style={styles.logoStyle} source={require('./img/logo.png')} />
           <TextInput style={styles.containerText} placeholder="Procurando algo?" />
           <View style={styles.userOptions}>
-            <TouchableOpacity onPress={navigateToProfile}>
+            <TouchableOpacity onPress={() => { navigateToProfile() }}>
               <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
             </TouchableOpacity>
             <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>

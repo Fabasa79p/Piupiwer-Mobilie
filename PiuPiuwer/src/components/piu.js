@@ -3,7 +3,14 @@ import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, Touchable
 import AsyncStorage from '@react-native-community/async-storage'
 import { likePiu } from '../api/likePiu'
 
-export default function PiuBox(props, { navigation }) {
+export default function PiuBox(props) {
+  // console.log(navigation)
+
+  function navigateToProfile() {
+    props.navigation.navigate('Profile', { id: props.op_id });
+  }
+
+
 
   const [usuarioLogado, setUsuario] = useState({ data: null, loaded: false })
   async function getUsuario() {
@@ -41,7 +48,9 @@ export default function PiuBox(props, { navigation }) {
 
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
-      <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
+      <TouchableOpacity onPress={() => navigateToProfile()}>
+        <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
+      </TouchableOpacity>
       <View style={styles.piuContent}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.piuwerNome}>{props.name}</Text>
@@ -53,7 +62,7 @@ export default function PiuBox(props, { navigation }) {
       </View>
       {props.username == usuarioLogado.data ?
         <View style={{ alignSelf: 'stretch', justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={() => { deletePiu(props.id)}}>
+          <TouchableOpacity onPress={() => { deletePiu(props.id) }}>
             <Image source={require('../screens/img/bin-icon.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => { likeHandler(); }}>
