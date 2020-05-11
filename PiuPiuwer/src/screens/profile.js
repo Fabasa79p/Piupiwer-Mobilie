@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import ProfileComponent from '../components/profile'
 import PiuBox from '../components/piu'
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 
 export default function profile({ route, navigation }) {
+
 
     const [usuarioLogado, setUsuarioLogado] = useState({
         data: null,
@@ -24,6 +25,7 @@ export default function profile({ route, navigation }) {
         data: null,
         loaded: false,
     });
+
 
     async function retrieveUser() {
         const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
@@ -51,6 +53,129 @@ export default function profile({ route, navigation }) {
             loaded: true,
         });
     }
+
+    async function deletePiuFuncoes(piuId) {
+        await deletePiu(piuId)
+        // console.log("passou aqui")
+        loadPiusData()
+    }
+
+    let [userData, setUserData] = useState({
+        data: null,
+        loaded: false
+    });
+    const { id } = route.params
+    console.log(`User de ID ${id}`)
+
+    async function loadUserData() {
+        const userData = await loadProfile(id);
+        // console.log(pius);
+        setUserData({
+            data: userData,
+            loaded: true,
+        });
+        // userData.data.seguidores.forEach(seguidor => {
+        //     if (seguidor.username == usuarioLogado) { setUserData({ followed: true }) }
+
+        // });
+
+
+    }
+
+
+
+
+    // console.log(userData.data)
+
+
+
+
+
+    function viewUser() {
+        if (userData.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
+            if (!userData.loaded) loadUserData();
+            if (!usuarioLogado.loaded) retrieveUser();
+            if (!usuarioID.loaded) retrieveID();
+            if (!token.loaded) retrieveToken();
+
+
+
+            // console.log(userData.data)
+
+            return (
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
+                >
+                    <Text style={{
+                        fontSize: 20,
+                        color: '#777',
+                    }}
+                    >
+                        Carregando Piuwer...
+                    </Text>
+                </View>
+            );
+        } else {
+            let followed = false
+            userData.data.seguidores.forEach(seguidor => {
+
+                if (seguidor.username == usuarioLogado.data) { followed = true }
+
+            });
+
+            return (
+                <>
+                    <ProfileComponent id={id} logado_id={usuarioID.data} username={userData.data.username} first_name={userData.data.first_name} last_name={userData.data.last_name} foto={userData.data.foto} sobre={userData.data.sobre} pius={userData.data.last_name} foto={userData.data.foto} followStatus={followed} />
+
+
+                    <FlatList
+                        data={userData.data.pius}
+                        renderItem={({ item }) => {
+                            let liked = false
+                            item.likers.forEach(liker => {
+                                if (liker.username == usuarioLogado.data) {
+                                    liked = true;
+
+
+                                }
+
+                            });
+
+
+                            // Adiciona um novo piu, ou o Component SemPius, à lista:
+                            return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} navigation={navigation} />
+                        }}
+                    />
+                </>
+            );
+
+            // <FlatList
+            //     data={userData.data}
+            //     renderItem={({ item }) => {
+
+            //         // Adiciona um novo piu, ou o Component SemPius, à lista:
+            //         return 
+            //     }}
+            // />
+            // );
+        }
+    }
+    return (
+        <View style={{ flex: 1 }}>
+            {viewUser()}
+
+        </View>
+    );
+
+}
+
+
+
+
+
 
 
     // const FirstRoute = () => (
@@ -107,98 +232,3 @@ export default function profile({ route, navigation }) {
     //         <PiuBox name='Renato' username='@renato' iconSource='http://piupiuwer.polijr.com.br/media/usuarios/eu_qcxSEy3.jpg' mensagem='testeee' />
     //     </ScrollView>
     // );
-
-    async function deletePiuFuncoes(piuId) {
-        await deletePiu(piuId)
-        // console.log("passou aqui")
-        loadPiusData()
-    }
-
-    let [userData, setUserData] = useState({
-        data: null,
-        loaded: false,
-    });
-    const { id } = route.params
-    console.log(id)
-
-    async function loadUserData() {
-        const userData = await loadProfile(id);
-        // console.log(pius);
-        setUserData({
-            data: userData,
-            loaded: true,
-        });
-    }
-    console.log(userData.data)
-
-
-    function viewUser() {
-        if (userData.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
-            if (!userData.loaded) loadUserData();
-            if (!usuarioLogado.loaded) retrieveUser();
-            if (!usuarioID.loaded) retrieveID();
-            if (!token.loaded) retrieveToken();
-
-            // console.log(userData.data)
-
-            return (
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-                >
-                    <Text style={{
-                        fontSize: 20,
-                        color: '#777',
-                    }}
-                    >
-                        Carregando Piuwer...
-                    </Text>
-                </View>
-            );
-        }
-
-        return (
-            <>
-                <ProfileComponent id={id} logado_id={usuarioID.data} username={userData.data.username} first_name={userData.data.first_name} last_name={userData.data.last_name} foto={userData.data.foto} sobre={userData.data.sobre} pius={userData.data.last_name} foto={userData.data.foto} />
-
-                <FlatList
-                    data={userData.data.pius}
-                    renderItem={({ item }) => {
-                        let liked = false
-                        item.likers.forEach(liker => {
-                            if (liker.username == usuarioLogado.data) {
-                                liked = true;
-
-
-                            }
-
-                        });
-
-                        // Adiciona um novo piu, ou o Component SemPius, à lista:
-                        return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} navigation={navigation} />
-                    }}
-                />
-            </>
-        );
-
-        // <FlatList
-        //     data={userData.data}
-        //     renderItem={({ item }) => {
-
-        //         // Adiciona um novo piu, ou o Component SemPius, à lista:
-        //         return 
-        //     }}
-        // />
-        // );
-    }
-    return (
-        <View style={{ flex: 1 }}>
-            {console.log(userData.data)}
-            {viewUser()}
-
-        </View>
-    );
-
-}

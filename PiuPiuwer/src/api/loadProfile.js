@@ -1,5 +1,4 @@
 export async function loadProfile(id) {
-    console.log('api call')
     try {
         let response = await fetch(
             `http://piupiuwer.polijr.com.br/usuarios/${id}/`,

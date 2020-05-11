@@ -29,7 +29,7 @@ export async function follow(id, id_logado) {
                 body: JSON.stringify(dados),
             })
         // Decodifica os dados para o formato json:
-        let data = await JSON.stringify(response)
+        let data = await response.json();
         // Imprime os dados obtidos:
         console.log(data);
         // Erro

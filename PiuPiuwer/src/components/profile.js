@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import PiuBox from '../components/piu'
 import { TabView, SceneMap } from 'react-native-tab-view';
@@ -10,10 +10,30 @@ import { follow } from '../api/follow'
 
 
 export default function ProfileComponent(props) {
-    { console.log(props.pius) }
+    if (props.followStatus) { console.log(`Usuario já seguido`) }
 
 
+    const [followed, setFollowed] = useState({ status: false, alreadyFollowed: false })
+    if (props.followStatus) {
+        useEffect(() => { setFollowed({ status: true, alreadyFollowed: true }) }, [])
+    }
+    function toggleFollow() {
+        if (followed.alreadyFollowed) {
+            if (followed.status) { setFollowed({ status: false }) }
+            if (!followed.status) { setFollowed({ status: true }) }
+        }
+        if (!followed.alreadyFollowed) {
+            if (followed.status) { setFollowed({ status: false }) }
+            if (!followed.status) { setFollowed({ status: true }) }
+        }
 
+
+    }
+
+    function followHandler() {
+        follow(props.id, props.logado_id);
+        toggleFollow();
+    }
 
 
     const [index, setIndex] = React.useState(0);
@@ -36,9 +56,12 @@ export default function ProfileComponent(props) {
                     <Text style={styles.userText} >@{props.username}</Text>
                     <Text style={styles.userText} >{props.sobre}</Text>
                 </View>
-                <TouchableOpacity style={styles.loginButton} onPress={() => follow(props.id, props.logado_id)}>
-                    <Text style={styles.loginText}>Seguir</Text>
+                {followed.status ? <TouchableOpacity style={styles.unfollowButton} onPress={() => followHandler()}>
+                    <Text style={styles.loginText}>Deixar de Seguir</Text>
                 </TouchableOpacity>
+                    : <TouchableOpacity style={styles.followButton} onPress={() => followHandler()}>
+                        <Text style={styles.loginText}>Seguir</Text>
+                    </TouchableOpacity>}
             </View>
         </>
     );
@@ -81,10 +104,19 @@ const styles = StyleSheet.create({
     scene: {
         flex: 1,
     },
-    loginButton: {
+    followButton: {
         alignSelf: "center",
         margin: 10,
         backgroundColor: 'hsla(207, 60%, 44%, 0.85)',
+        alignItems: 'center',
+        padding: 5,
+        paddingHorizontal: 15,
+        borderRadius: 50
+    },
+    unfollowButton: {
+        alignSelf: "center",
+        margin: 10,
+        backgroundColor: '#ff784f',
         alignItems: 'center',
         padding: 5,
         paddingHorizontal: 15,
