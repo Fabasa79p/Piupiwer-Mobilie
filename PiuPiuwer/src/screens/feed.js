@@ -7,6 +7,7 @@ import { newPiu } from '../api/newpiu'
 import AsyncStorage from '@react-native-community/async-storage'
 import { loadPius } from '../api/loadPius'
 import { deletePiu } from '../api/deletePiu'
+import { loadProfile } from '../api/loadProfile'
 
 
 export default function feed({ navigation }) {
@@ -32,7 +33,6 @@ export default function feed({ navigation }) {
 
   async function loadPiusData() {
     const pius = await loadPius();
-    // console.log(pius);
     setPius({
       data: pius,
       loaded: true,
@@ -40,7 +40,6 @@ export default function feed({ navigation }) {
   }
   async function retrieveUser() {
     const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
-    // console.log(usuarioLogado)
     setUsuarioLogado({
       data: usuarioLogado,
       loaded: true,
@@ -49,7 +48,6 @@ export default function feed({ navigation }) {
 
   async function retrieveID() {
     const usuarioID = await AsyncStorage.getItem('idUsuario');
-    // console.log(usuarioID)
     setUsuarioID({
       data: usuarioID,
       loaded: true,
@@ -65,12 +63,13 @@ export default function feed({ navigation }) {
     });
   }
 
-
-
   function navigateToProfile() {
     navigation.navigate('Profile', { id: usuarioID.data })
   }
 
+  function navigateToOwnProfile() {
+    navigation.navigate('OwnProfile', { id: usuarioID.data })
+  }
   const [visible, setVisible] = useState(false)
   const _openMenu = () => setVisible(true);
   const _closeMenu = () => setVisible(false);
@@ -78,10 +77,8 @@ export default function feed({ navigation }) {
 
   async function deletePiuFuncoes(piuId) {
     await deletePiu(piuId)
-    // console.log("passou aqui")
     loadPiusData()
   }
-
 
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
@@ -112,15 +109,11 @@ export default function feed({ navigation }) {
       <FlatList
         data={pius.data}
         renderItem={({ item }) => {
-
           let liked = false
           item.likers.forEach(liker => {
             if (liker.username == usuarioLogado.data) {
               liked = true;
-
-
             }
-
           });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
           return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} navigation={navigation} />
@@ -138,13 +131,12 @@ export default function feed({ navigation }) {
   return (
     <Provider>
       <LinearGradient style={{ flex: 1 }} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
-
         {/* barra de navegação superior */}
         <View style={styles.headerStyle}>
           <Image style={styles.logoStyle} source={require('./img/logo.png')} />
           <TextInput style={styles.containerText} placeholder="Procurando algo?" />
           <View style={styles.userOptions}>
-            <TouchableOpacity onPress={() => { navigateToProfile() }}>
+            <TouchableOpacity onPress={() => { navigateToOwnProfile() }}>
               <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
             </TouchableOpacity>
             <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>
@@ -161,7 +153,7 @@ export default function feed({ navigation }) {
         {/* conteudo da pag */}
 
         {/* novo piu */}
-        {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16 }}>O piu não pode conter mais do que 140 caracteres!</Text>
+        {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16, textAlign:'center' }}>O piu não pode conter mais do que 140 caracteres!</Text>
           : null
         }
         <View style={styles.PiuContainer}>
@@ -175,15 +167,12 @@ export default function feed({ navigation }) {
               <Text style={styles.btnText}>Piar</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> 
 
         {/* feed */}
         <View style={{ flex: 1 }}>
           {piusArea()}
         </View>
-
-        {/* Mensagem do final
-        <Text style={styles.finalText}>Ops! Parece que não há mais nada por aqui</Text> */}
       </LinearGradient>
     </Provider>
   );

@@ -6,6 +6,7 @@ import signup from './screens/signup';
 import profile from './screens/profile';
 import login from './screens/login';
 import feed from './screens/feed';
+import ownProfile from './screens/ownprofile';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ export default function Routes() {
             <Stack.Screen name="Login" component={login} />
             <Stack.Screen name="Signup" component={signup} />
             <Stack.Screen name="Profile" component={profile} />
+            <Stack.Screen name="OwnProfile" component={ownProfile} />
             <Stack.Screen name="Feed" component={feed} />
         </ Stack.Navigator>
     );

@@ -61,23 +61,20 @@ export default function PiuBox(props) {
         </View>
       </View>
       {props.username == usuarioLogado.data ?
-        <View style={{ alignSelf: 'stretch', justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={() => { deletePiu(props.id) }}>
-            <Image source={require('../screens/img/bin-icon.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => { likeHandler(); }}>
-            {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
-
-          </TouchableOpacity>
-        </View>
-        :
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'flex-end' }} onPress={() => { likeHandler(); }}>
-          {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
-          <Text style={styles.piuText}>{liked.initialCounter}</Text>
-
+        <TouchableOpacity onPress={() => { deletePiu(props.id) }}>
+              <Image source={require('../screens/img/bin-icon.png')} />
         </TouchableOpacity>
-      }
+      :null}
     </View>
+    <View style={{alignSelf: 'stretch', justifyContent: 'space-around', flexDirection:'row'}}>
+      <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'flex-end' }} onPress={() => { likeHandler(); }}>
+        {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
+        <Text style={styles.piuText}>{liked.initialCounter}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Image source={require('../screens/img/favorite-icon.png')} />
+      </TouchableOpacity>
+    </View>    
   </View>
 };
 
@@ -101,6 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginVertical: 5,
     flex: 1,
+    marginHorizontal:10,
     backgroundColor: 'hsla(0, 0%, 96%, .7)'
   },
 
