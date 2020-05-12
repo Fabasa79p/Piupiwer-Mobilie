@@ -5,7 +5,8 @@ import { Alert } from 'react-native';
 //     return !Object.keys(data).includes('token');
 // }
 
-export async function signIn(usuario, nome, sobrenome, email, senha, sobre, { navigation }) {
+export async function signIn(usuario, nome, sobrenome, email, senha, sobre, foto, { navigation }) {
+    console.log(foto)
     function navigateToLogin() {
         navigation.navigate('Login');
     }
@@ -31,7 +32,7 @@ export async function signIn(usuario, nome, sobrenome, email, senha, sobre, { na
                     'email': email,
                     'sobre': sobre,
                     'password': senha,
-                    // 'foto': foto
+                    'imagem': foto
 
 
                 }),
