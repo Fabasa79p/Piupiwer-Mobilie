@@ -10,7 +10,7 @@ import { deletePiu } from '../api/deletePiu'
 import { loadProfile } from '../api/loadProfile'
 
 export default function feed({ navigation }) {
-  let [pius, setPius] = useState({
+  const [pius, setPius] = useState({
     data: null,
     loaded: false,
   });
@@ -78,10 +78,26 @@ export default function feed({ navigation }) {
 
   }
 
-  async function loadPiusData() {
+  async function loadPiusData(dadosUser, IDUser) {
     const pius = await loadPius();
+    const followPius = [];
+    const piuwersSeguidos =[]
+    piuwersSeguidos.push(parseInt(IDUser))
+    // console.log(dadosUser)
+
+    //faz a lista de id das pessoas que o usuario segue
+    await dadosUser.seguindo.forEach(following => {
+      piuwersSeguidos.push(following.id)
+      console.log(piuwersSeguidos)
+    })
+
+    //filtra os pius de acordo com a lista que o user segue
+    pius.forEach(piu =>{
+      if (piuwersSeguidos.includes(piu.usuario.id)){
+        followPius.push(piu)}
+    })
     setPius({
-      data: pius,
+      data: followPius,
       loaded: true,
     });
   }
@@ -136,17 +152,16 @@ export default function feed({ navigation }) {
   async function deletePiuFuncoes(piuId) {
     await deletePiu(piuId)
     setPius(pius.data.filter(piu => piu.id != piuId))
-    // loadPiusData()
   }
 
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null || userData.data == null) {
-      if (!pius.loaded) loadPiusData();
       if (!usuarioLogado.loaded) retrieveUser();
       if (!usuarioID.loaded) retrieveID();
       if (!token.loaded) retrieveToken();
       if (!searchList.loaded) loadSearchList();
       if (!userData.loaded) getUserData();
+      if (!pius.loaded && userData.loaded && usuarioID.loaded) loadPiusData(userData.data, usuarioID.data);
 
 
       return (
@@ -242,7 +257,6 @@ export default function feed({ navigation }) {
     const novoPiu = await newPiu(piuConteudo)
     setPius([...pius.data, novoPiu])
     setPiu('')
-    // loadPiusData()
   }
 
   return (
