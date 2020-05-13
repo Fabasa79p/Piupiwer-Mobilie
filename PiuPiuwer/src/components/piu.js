@@ -44,7 +44,7 @@ export default function PiuBox(props) {
     toggleLike();
   }
 
-  //funções para favoritar
+  // funções para favoritar
   const [favoritado, setFavoritado] = useState({ status: false, initialCounter: props.favoriteCounter, favorited: false })
   if (props.favoritadoStatus) {
     useEffect(() => { setFavoritado({ status: true, initialCounter: props.favoriteCounter, favorited: true }) }, [])
@@ -100,13 +100,6 @@ export default function PiuBox(props) {
     </View>    
   </View>
 };
-
-
-
-
-
-
-
 
 
 

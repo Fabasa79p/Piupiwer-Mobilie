@@ -24,8 +24,7 @@ export async function newPiu(textoPiu) {
         // Decodifica os dados para o formato json:
         let data = await response.json();
 
-        // Imprime os dados obtidos:
-        console.log(data);
+        return await data;
 
     } catch (error) {
         console.error(error);

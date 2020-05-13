@@ -77,7 +77,8 @@ export default function feed({ navigation }) {
 
   async function deletePiuFuncoes(piuId) {
     await deletePiu(piuId)
-    loadPiusData()
+    setPius(pius.data.filter (piu=> piu.id !=piuId))
+    // loadPiusData()
   }
 
   function piusArea() {
@@ -122,18 +123,18 @@ export default function feed({ navigation }) {
             }
           });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`}
-          username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked}
-          counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
+          return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
+          
         }}
       />
     );
   }
 
   async function novoPiuFuncoes(piuConteudo) {
-    await newPiu(piuConteudo)
+    const novoPiu = await newPiu(piuConteudo)
+    setPius([...pius.data, novoPiu])
     setPiu('')
-    loadPiusData()
+    // loadPiusData()
   }
 
   return (
