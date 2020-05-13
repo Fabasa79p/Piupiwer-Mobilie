@@ -4,16 +4,13 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 
 
-export async function favoritarPiu(id_piu, id_usuario) {
+export async function favoritarPiu(piu, usuario) {
     const token = await AsyncStorage.getItem('token');
-    const dados = {
-        usuario: id_usuario,
-        piu: id_piu
-    }
     try {
         console.log(`token: ${token}`)
-        console.log(`usuario: ${id_usuario}`)
-        console.log(`piu: ${id_piu}`)
+        console.log(`usuario: ${usuario}`)
+        console.log(`piu: ${piu}`)
+        console.log("OI")
         let response = await fetch(
             'http://piupiuwer.polijr.com.br/pius/favoritar/',
             {
@@ -22,7 +19,12 @@ export async function favoritarPiu(id_piu, id_usuario) {
                     'Content-type': 'application/json',
                     'Authorization': `JWT ${token}`
                 }),
-                body: JSON.stringify(dados),
+                body: JSON.stringify({
+                    'usuario': usuario,
+                    'piu': piu
+                }
+                    
+                ),
             })
         // Decodifica os dados para o formato json:
         let data = await response.json();
@@ -31,6 +33,6 @@ export async function favoritarPiu(id_piu, id_usuario) {
         console.log(data);
 
     } catch (error) {
-        // console.error(error);
+        console.error(error);
     }
 }
