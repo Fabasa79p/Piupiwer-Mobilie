@@ -12,6 +12,35 @@ export default function signup({ navigation }) {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [sobre, setSobre] = useState('');
+    let [foto, setFoto] = useState({ uri: null });
+
+    const options = {
+        title: 'Selecionar foto',
+        storageOptions: {
+            skipBackup: true,
+            path: 'images',
+        },
+    };
+
+    const selectPhoto = () => {
+        ImagePicker.showImagePicker(options, (response) => {
+            // console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                // You can also display the image using data:
+                setFoto({ uri: 'data:image/jpeg;base64,' + response.data });
+
+
+            }
+        });
+    }
+
 
 
 
@@ -51,8 +80,10 @@ export default function signup({ navigation }) {
                     <Text style={styles.containerText}>Sobre:</Text>
                     <TextInput style={styles.containerText} placeholder="Fale um pouco sobre você" value={sobre} onChangeText={Sobre => setSobre(Sobre)} />
                 </View>
-                <View style={styles.formArea}>
+                <View style={styles.photoArea} >
                     <Text style={styles.containerText}>Foto de perfil:</Text>
+                    <TouchableOpacity style={styles.photoBtn} onPress={() => { setFoto(selectPhoto()) }}><Text>Selecionar</Text>
+                    </TouchableOpacity>
                     {/* <TextInput style={styles.containerText} placeholder="Teste" /> */}
                     {/* <TouchableOpacity style={styles.photoBtn}>
                         <Text>Escolher foto</Text>
@@ -63,7 +94,7 @@ export default function signup({ navigation }) {
             {/* onPress={navigateToLogin} */}
             <View>
                 <TouchableOpacity style={styles.loginButton}>
-                    <Text style={styles.loginText} onPress={() => { signIn(usuario, nome, sobrenome, email, senha, sobre, { navigation }) }}>Cadastrar</Text>
+                    <Text style={styles.loginText} onPress={() => { signIn(usuario, nome, sobrenome, email, senha, sobre, foto.uri, { navigation }) }}>Cadastrar</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -95,6 +126,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginLeft: 20
     },
+    photoArea: {
+        marginBottom: 30,
+        marginLeft: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignContent: 'stretch'
+    },
     containerText: {
         fontSize: 25,
     },
@@ -114,9 +152,9 @@ const styles = StyleSheet.create({
 
     photoBtn: {
         margin: 10,
-        marginRight: 250,
+        // marginRight: 250,
         backgroundColor: 'hsla(207, 60%, 44%, 0.5)',
-        alignItems: 'center',
+        // alignContent: 'flex-end',
         paddingVertical: 5,
     },
     warningText: {
