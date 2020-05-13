@@ -30,8 +30,8 @@ export default function PiuBox(props) {
   }
   function toggleLike() {
     if (liked.alreadyLiked) {
-      if (liked.status) { setLiked({ status: false, initialCounter: props.counter - 1 }) }
-      if (!liked.status) { setLiked({ status: true, initialCounter: props.counter }) }
+      if (liked.status) { setLiked({ status: false, initialCounter: props.counter - 1,  alreadyLiked: true  }) }
+      if (!liked.status) { setLiked({ status: true, initialCounter: props.counter,  alreadyLiked: true  }) }
     }
     if (!liked.alreadyLiked) {
       if (liked.status) { setLiked({ status: false, initialCounter: props.counter }) }
@@ -52,8 +52,9 @@ export default function PiuBox(props) {
 
   function toggleFavorite() {
     if (favoritado.favorited) {
-      if (favoritado.status) { setFavoritado({ status: false, initialCounter: props.favoriteCounter - 1 }) }
-      if (!favoritado.status) { setFavoritado({ status: true, initialCounter: props.favoriteCounter }) }
+      if (favoritado.status) { setFavoritado({ status: false, initialCounter: props.favoriteCounter - 1, favorited: true })}
+      if (!favoritado.status) { setFavoritado({ status: true, initialCounter: props.favoriteCounter, favorited: true }) }
+      console.log(favoritado.favorited)
     }
     if (!favoritado.favorited) {
       if (favoritado.status) { setFavoritado({ status: false, initialCounter: props.favoriteCounter }) }

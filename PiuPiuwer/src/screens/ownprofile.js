@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList } from 'react-native';
 import ProfileComponent from '../components/profile'
 import PiuBox from '../components/piu'
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { loadProfile } from '../api/loadProfile'
 import { deletePiu } from '../api/deletePiu'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -171,6 +171,14 @@ export default function ownProfile({ route, navigation }) {
                     renderScene={renderScene}
                     onIndexChange={setIndex}
                     initialLayout={initialLayout}
+                    renderTabBar={(props) =>
+                        <TabBar
+                          {...props}
+                          indicatorStyle={{ backgroundColor: 'white' }}
+                          style={{backgroundColor: 'hsla(207, 60%, 44%, 0.85)', height: 50}}
+                        />
+                    }
+
                     />                    
                 </>
             );
