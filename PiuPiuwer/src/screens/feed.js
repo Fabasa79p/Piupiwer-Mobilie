@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList, Alert } from 'react-native';
 import { Menu, Provider } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import PiuBox from '../components/piu'
@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { loadPius } from '../api/loadPius'
 import { deletePiu } from '../api/deletePiu'
 import { loadProfile } from '../api/loadProfile'
-
 
 export default function feed({ navigation }) {
   let [pius, setPius] = useState({
@@ -29,7 +28,46 @@ export default function feed({ navigation }) {
     data: null,
     loaded: false,
   });
+  const [search, setSearch] = useState({
+    data: null,
+    loaded: false,
+  });
 
+  const [searchList, setSearchList] = useState({
+    data: null,
+    loaded: false,
+  });
+
+
+
+  async function loadSearchList() {
+    const searchList = await loadProfile(null);
+    setSearchList({
+      data: searchList,
+      loaded: true,
+    });
+  }
+
+  function navigateToSearch(id) {
+    navigation.navigate('Profile', { id: id });
+  }
+
+  function searchHandler() {
+    let found = false
+    searchList.data.forEach(user => {
+      if (user.username == search) {
+        found = true;
+        navigateToSearch(user.id)
+      }
+
+    });
+    if (!found) {
+      return Alert.alert('Usuário não encontrado!')
+    }
+    console.log(found)
+
+
+  }
 
   async function loadPiusData() {
     const pius = await loadPius();
@@ -77,16 +115,17 @@ export default function feed({ navigation }) {
 
   async function deletePiuFuncoes(piuId) {
     await deletePiu(piuId)
-    setPius(pius.data.filter (piu=> piu.id !=piuId))
+    setPius(pius.data.filter(piu => piu.id != piuId))
     // loadPiusData()
   }
 
   function piusArea() {
-    if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
+    if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null) {
       if (!pius.loaded) loadPiusData();
       if (!usuarioLogado.loaded) retrieveUser();
       if (!usuarioID.loaded) retrieveID();
       if (!token.loaded) retrieveToken();
+      if (!searchList.loaded) loadSearchList();
 
       return (
         <View style={{
@@ -124,7 +163,7 @@ export default function feed({ navigation }) {
           });
           // Adiciona um novo piu, ou o Component SemPius, à lista:
           return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
-          
+
         }}
       />
     );
@@ -143,7 +182,7 @@ export default function feed({ navigation }) {
         {/* barra de navegação superior */}
         <View style={styles.headerStyle}>
           <Image style={styles.logoStyle} source={require('./img/logo.png')} />
-          <TextInput style={styles.containerText} placeholder="Procurando algo?" />
+          <TextInput style={styles.containerText} placeholder="Procurando algo?" value={search} onChangeText={Search => setSearch(Search)} /><TouchableOpacity onPress={() => { searchHandler() }}><Image source={require('../screens/img/search.png')} style={styles.searcn} /></TouchableOpacity>
           <View style={styles.userOptions}>
             <TouchableOpacity onPress={() => { navigateToOwnProfile() }}>
               <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
@@ -162,7 +201,7 @@ export default function feed({ navigation }) {
         {/* conteudo da pag */}
 
         {/* novo piu */}
-        {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16, textAlign:'center' }}>O piu não pode conter mais do que 140 caracteres!</Text>
+        {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16, textAlign: 'center' }}>O piu não pode conter mais do que 140 caracteres!</Text>
           : null
         }
         <View style={styles.PiuContainer}>
@@ -176,7 +215,7 @@ export default function feed({ navigation }) {
               <Text style={styles.btnText}>Piar</Text>
             </TouchableOpacity>
           </View>
-        </View> 
+        </View>
 
         {/* feed */}
         <View style={{ flex: 1 }}>
@@ -249,7 +288,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'column',
     marginVertical: 5,
-    marginHorizontal:5,
+    marginHorizontal: 5,
   },
 
   newPiuInput: {
@@ -291,5 +330,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  search: {
+    height: 10,
+    width: 10
   }
 })

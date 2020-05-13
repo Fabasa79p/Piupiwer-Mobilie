@@ -1,7 +1,9 @@
 export async function loadProfile(id) {
+    let link
+    if (id == null) { link = 'http://piupiuwer.polijr.com.br/usuarios/' } else { link = `http://piupiuwer.polijr.com.br/usuarios/${id}/` }
     try {
         let response = await fetch(
-            `http://piupiuwer.polijr.com.br/usuarios/${id}/`,
+            link,
             {
                 method: 'GET',
                 headers: {
