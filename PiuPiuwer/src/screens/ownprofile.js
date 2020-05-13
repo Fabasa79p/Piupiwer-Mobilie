@@ -78,19 +78,47 @@ export default function ownProfile({ route, navigation }) {
                data={userData.data.pius}
                renderItem={({ item }) => {
                    let liked = false
+                   let favoritado = false
                    item.likers.forEach(liker => {
                        if (liker.username == usuarioLogado.data) {
                            liked = true;
                        }
                    });
+                   item.favoritado_por.forEach(favoritado_por => {
+                    if (favoritado_por.username == usuarioLogado.data) {
+                      favoritado = true;
+                    }
+                   });
                    // Adiciona um novo piu, ou o Component SemPius, à lista:
-                   return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} navigation={navigation} />
+                   return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`}
+                   username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked}
+                   counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
                }}
            />
     );
 
     const SecondRoute = () => (
-    <Text>Oiiiiiiiiiiiiiiiii</Text>
+        <FlatList
+               data={userData.data.favoritos}
+               renderItem={({ item }) => {
+                   let liked = false
+                   let favoritado = false
+                   item.likers.forEach(liker => {
+                       if (liker.username == usuarioLogado.data) {
+                           liked = true;
+                       }
+                   });
+                   item.favoritado_por.forEach(favoritado_por => {
+                    if (favoritado_por.username == usuarioLogado.data) {
+                      favoritado = true;
+                    }
+                   });
+                   // Adiciona um novo piu, ou o Component SemPius, à lista:
+                   return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`}
+                   username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked}
+                   counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
+                }}
+           />
     );
     
     const initialLayout = { backgroundColor: 'hsla(207, 60%, 44%, 0.85)', width: Dimensions.get('window').width, };

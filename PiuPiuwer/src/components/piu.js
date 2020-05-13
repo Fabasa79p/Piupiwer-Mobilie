@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
 import { likePiu } from '../api/likePiu'
+import { favoritarPiu } from '../api/favoritarPiu'
 
 export default function PiuBox(props) {
   // console.log(navigation)
@@ -21,6 +22,8 @@ export default function PiuBox(props) {
   if (usuarioLogado.data == null) {
     getUsuario()
   }
+
+  // funções para curitr
   const [liked, setLiked] = useState({ status: false, initialCounter: props.counter, alreadyLiked: false })
   if (props.likeStatus) {
     useEffect(() => { setLiked({ status: true, initialCounter: props.counter, alreadyLiked: true }) }, [])
@@ -34,14 +37,33 @@ export default function PiuBox(props) {
       if (liked.status) { setLiked({ status: false, initialCounter: props.counter }) }
       if (!liked.status) { setLiked({ status: true, initialCounter: props.counter + 1 }) }
     }
-
-
   }
 
   function likeHandler() {
     likePiu(props.id, props.id_usuario);
     toggleLike();
+  }
 
+  //funções para favoritar
+  const [favoritado, setFavoritado] = useState({ status: false, initialCounter: props.favoriteCounter, favorited: false })
+  if (props.favoritadoStatus) {
+    useEffect(() => { setFavoritado({ status: true, initialCounter: props.favoriteCounter, favorited: true }) }, [])
+  }
+
+  function toggleFavorite() {
+    if (favoritado.favorited) {
+      if (favoritado.status) { setFavoritado({ status: false, initialCounter: props.favoriteCounter - 1 }) }
+      if (!favoritado.status) { setFavoritado({ status: true, initialCounter: props.favoriteCounter }) }
+    }
+    if (!favoritado.favorited) {
+      if (favoritado.status) { setFavoritado({ status: false, initialCounter: props.favoriteCounter }) }
+      if (!favoritado.status) { setFavoritado({ status: true, initialCounter: props.favoriteCounter + 1 }) }
+    }
+  }
+
+  function favoriteHandler() {
+    favoritarPiu(props.id, props.id_usuario);
+    toggleFavorite();
   }
 
   let deletePiu = props.delete
@@ -71,8 +93,9 @@ export default function PiuBox(props) {
         {liked.status ? <Image source={require('../screens/img/liked-icon.png')} /> : <Image source={require('../screens/img/like-icon.png')} />}
         <Text style={styles.piuText}>{liked.initialCounter}</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Image source={require('../screens/img/favorite-icon.png')} />
+      <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'flex-end' }} onPress={() => { favoriteHandler() }}>
+        {favoritado.status ? <Image source={require('../screens/img/favorited-icon.png')} /> : <Image source={require('../screens/img/favorite-icon.png')} />}
+        <Text style={styles.piuText}>{favoritado.initialCounter}</Text>
       </TouchableOpacity>
     </View>    
   </View>
