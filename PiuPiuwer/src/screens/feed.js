@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { Menu, Provider } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import PiuBox from '../components/piu'
@@ -19,6 +19,8 @@ export default function feed({ navigation }) {
     loaded: false,
   });
 
+
+
   const [usuarioID, setUsuarioID] = useState({
     data: null,
     loaded: false,
@@ -37,6 +39,13 @@ export default function feed({ navigation }) {
     data: null,
     loaded: false,
   });
+
+  const [userData, setUserData] = useState({
+    data: null,
+    loaded: false,
+  });
+
+
 
 
 
@@ -84,6 +93,7 @@ export default function feed({ navigation }) {
     });
   }
 
+
   async function retrieveID() {
     const usuarioID = await AsyncStorage.getItem('idUsuario');
     setUsuarioID({
@@ -100,6 +110,16 @@ export default function feed({ navigation }) {
       loaded: true,
     });
   }
+
+  async function getUserData() {
+    const userData = await loadProfile(usuarioID.data)
+    setUserData({
+      data: userData,
+      loaded: true,
+    });
+
+  }
+
 
   function navigateToProfile() {
     navigation.navigate('Profile', { id: usuarioID.data })
@@ -120,52 +140,101 @@ export default function feed({ navigation }) {
   }
 
   function piusArea() {
-    if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null) {
+    if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null || userData.data == null) {
       if (!pius.loaded) loadPiusData();
       if (!usuarioLogado.loaded) retrieveUser();
       if (!usuarioID.loaded) retrieveID();
       if (!token.loaded) retrieveToken();
       if (!searchList.loaded) loadSearchList();
+      if (!userData.loaded) getUserData();
+
 
       return (
         <View style={{
           flex: 1,
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+
         }}
         >
+          {/* <Image style={styles.loadStyle} source={require('./img/logo.png')} /> */}
+
           <Text style={{
             fontSize: 20,
             color: '#777',
+            // padding: 30,
           }}
           >
             Carregando pius...
                 </Text>
+          <ActivityIndicator size="large" color="hsla(207, 60%, 44%, 0.85)" />
         </View>
       );
     }
 
     return (
-      <FlatList
-        data={pius.data}
-        renderItem={({ item }) => {
-          let liked = false
-          let favoritado = false
-          item.likers.forEach(liker => {
-            if (liker.username == usuarioLogado.data) {
-              liked = true;
-            }
-          });
-          item.favoritado_por.forEach(favoritado_por => {
-            if (favoritado_por.username == usuarioLogado.data) {
-              favoritado = true;
-            }
-          });
-          // Adiciona um novo piu, ou o Component SemPius, à lista:
-          return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
+      <Provider>
+        <LinearGradient style={{ flex: 1 }} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
+          {/* barra de navegação superior */}
+          <View style={styles.headerStyle}>
+            <Image style={styles.logoStyle} source={require('./img/logo.png')} />
+            <TextInput style={styles.containerText} placeholder="Procurando algo?" value={search} onChangeText={Search => setSearch(Search)} /><TouchableOpacity onPress={() => { searchHandler() }}><Image source={require('../screens/img/search.png')} style={styles.searcn} /></TouchableOpacity>
+            <View style={styles.userOptions}>
+              <TouchableOpacity onPress={() => { navigateToOwnProfile() }}>
+                <Image style={styles.iconStyle} source={{ uri: userData.data.foto }} />
+              </TouchableOpacity>
+              <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>
+                <Menu.Item onPress={navigateToProfile} title='Meu Perfil' />
+                <Menu.Item title='Ajuda' />
+                <Menu.Item title='Configurações' />
+                <Menu.Item title='Sair' />
+              </Menu>
+            </View>
+          </View>
 
-        }}
-      />
+          {/* <Navbar/> */}
+
+          {/* conteudo da pag */}
+
+          {/* novo piu */}
+          {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16, textAlign: 'center' }}>O piu não pode conter mais do que 140 caracteres!</Text>
+            : null
+          }
+          <View style={styles.PiuContainer}>
+            <View style={{ flexDirection: 'row' }}>
+              <Image style={styles.iconStyle} source={{ uri: userData.data.foto }} />
+              <TextInput autoCorrect={false} multiline={true} style={[styles.newPiuInput, { color: piuConteudo.length > 140 ? 'red' : 'black' }]} placeholder="Compartilhe um novo piu" value={piuConteudo} onChangeText={piuConteudo => setPiu(piuConteudo)} />
+            </View>
+            <View style={styles.newPiuDetail}>
+              <Text style={{ color: piuConteudo.length > 140 ? 'red' : 'black' }}>{piuConteudo.length}/140</Text>
+              <TouchableOpacity disabled={piuConteudo.length == 0 ? true : piuConteudo.length > 140 ? true : false} onPress={() => { novoPiuFuncoes(piuConteudo) }} style={[styles.piuBtn, { marginLeft: 10, opacity: piuConteudo.length == 0 ? 0.7 : piuConteudo.length > 140 ? 0.7 : 1 }]}>
+                <Text style={styles.btnText}>Piar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <FlatList
+            data={pius.data}
+            renderItem={({ item }) => {
+              let liked = false
+              let favoritado = false
+              item.likers.forEach(liker => {
+                if (liker.username == usuarioLogado.data) {
+                  liked = true;
+                }
+              });
+              item.favoritado_por.forEach(favoritado_por => {
+                if (favoritado_por.username == usuarioLogado.data) {
+                  favoritado = true;
+                }
+              });
+              // Adiciona um novo piu, ou o Component SemPius, à lista:
+              return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length} favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length} navigation={navigation} />
+
+            }}
+          />
+        </LinearGradient>
+      </Provider>
     );
   }
 
@@ -177,52 +246,9 @@ export default function feed({ navigation }) {
   }
 
   return (
-    <Provider>
-      <LinearGradient style={{ flex: 1 }} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)']} >
-        {/* barra de navegação superior */}
-        <View style={styles.headerStyle}>
-          <Image style={styles.logoStyle} source={require('./img/logo.png')} />
-          <TextInput style={styles.containerText} placeholder="Procurando algo?" value={search} onChangeText={Search => setSearch(Search)} /><TouchableOpacity onPress={() => { searchHandler() }}><Image source={require('../screens/img/search.png')} style={styles.searcn} /></TouchableOpacity>
-          <View style={styles.userOptions}>
-            <TouchableOpacity onPress={() => { navigateToOwnProfile() }}>
-              <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
-            </TouchableOpacity>
-            <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>
-              <Menu.Item onPress={navigateToProfile} title='Meu Perfil' />
-              <Menu.Item title='Ajuda' />
-              <Menu.Item title='Configurações' />
-              <Menu.Item title='Sair' />
-            </Menu>
-          </View>
-        </View>
-
-        {/* <Navbar/> */}
-
-        {/* conteudo da pag */}
-
-        {/* novo piu */}
-        {piuConteudo.length > 140 ? <Text style={{ color: 'red', fontSize: 16, textAlign: 'center' }}>O piu não pode conter mais do que 140 caracteres!</Text>
-          : null
-        }
-        <View style={styles.PiuContainer}>
-          <View style={{ flexDirection: 'row' }}>
-            <Image style={styles.iconStyle} source={require('./img/anonymous-icon.png')} />
-            <TextInput autoCorrect={false} multiline={true} style={[styles.newPiuInput, { color: piuConteudo.length > 140 ? 'red' : 'black' }]} placeholder="Compartilhe um novo piu" value={piuConteudo} onChangeText={piuConteudo => setPiu(piuConteudo)} />
-          </View>
-          <View style={styles.newPiuDetail}>
-            <Text style={{ color: piuConteudo.length > 140 ? 'red' : 'black' }}>{piuConteudo.length}/140</Text>
-            <TouchableOpacity disabled={piuConteudo.length == 0 ? true : piuConteudo.length > 140 ? true : false} onPress={() => { novoPiuFuncoes(piuConteudo) }} style={[styles.piuBtn, { marginLeft: 10, opacity: piuConteudo.length == 0 ? 0.7 : piuConteudo.length > 140 ? 0.7 : 1 }]}>
-              <Text style={styles.btnText}>Piar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* feed */}
-        <View style={{ flex: 1 }}>
-          {piusArea()}
-        </View>
-      </LinearGradient>
-    </Provider>
+    <View style={{ flex: 1 }}>
+      {piusArea()}
+    </View>
   );
 };
 
@@ -244,6 +270,13 @@ const styles = StyleSheet.create({
     height: 40,
     width: 50,
     resizeMode: 'cover',
+  },
+
+  loadStyle: {
+    height: 60,
+    width: 70,
+    resizeMode: 'cover',
+    alignSelf: 'flex-start'
   },
 
   textStyle: {
