@@ -7,6 +7,7 @@ import profile from './screens/profile';
 import login from './screens/login';
 import feed from './screens/feed';
 import ownProfile from './screens/ownprofile';
+import searchArea from './screens/searchArea';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ export default function Routes() {
             <Stack.Screen name="Login" component={login} />
             <Stack.Screen name="Signup" component={signup} />
             <Stack.Screen name="Profile" component={profile} />
+            <Stack.Screen name="Search" component={searchArea} />
             <Stack.Screen name="OwnProfile" component={ownProfile} options={{ title: 'Perfil' }} />
             <Stack.Screen name="Feed" component={feed} />
         </ Stack.Navigator>

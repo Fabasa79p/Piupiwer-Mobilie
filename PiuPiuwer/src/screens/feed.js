@@ -52,8 +52,12 @@ export default function feed({ navigation }) {
     });
   }
 
-  function navigateToSearch(id) {
-    navigation.navigate('Profile', { id: id });
+  // function navigateToSearch(id) {
+  //   navigation.navigate('Profile', { id: id });
+  // }
+
+  function navigateToSearch(search) {
+    navigation.navigate('Search', { termo: search })
   }
 
   function searchHandler() {
@@ -133,6 +137,8 @@ export default function feed({ navigation }) {
     navigation.navigate('Profile', { id: usuarioID.data })
   }
 
+
+
   function navigateToOwnProfile() {
     navigation.navigate('OwnProfile', { id: usuarioID.data })
   }
@@ -205,7 +211,7 @@ export default function feed({ navigation }) {
           {/* barra de navegação superior */}
           <View style={styles.headerStyle}>
             <Image style={styles.logoStyle} source={require('./img/logo.png')} />
-            <TextInput style={styles.containerText} placeholder="Procurando algo?" value={search} onChangeText={Search => setSearch(Search)} /><TouchableOpacity onPress={() => { searchHandler() }}><Image source={require('../screens/img/search.png')} style={styles.searcn} /></TouchableOpacity>
+            <TextInput style={styles.containerText} placeholder="Procurando algo?" value={search} onChangeText={Search => setSearch(Search)} /><TouchableOpacity onPress={() => { navigateToSearch(search) }}><Image source={require('../screens/img/search.png')} style={styles.searcn} /></TouchableOpacity>
             <View style={styles.userOptions}>
               <TouchableOpacity onPress={() => { navigateToOwnProfile() }}>
                 <Image style={styles.iconStyle} source={{ uri: userData.data.foto }} />
