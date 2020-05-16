@@ -24,7 +24,7 @@ export default function Routes() {
             <Stack.Screen name="Login" component={login} />
             <Stack.Screen name="Signup" component={signup} />
             <Stack.Screen name="Profile" component={profile} />
-            <Stack.Screen name="OwnProfile" component={ownProfile} />
+            <Stack.Screen name="OwnProfile" component={ownProfile} options={{ title: 'Perfil' }} />
             <Stack.Screen name="Feed" component={feed} />
         </ Stack.Navigator>
     );

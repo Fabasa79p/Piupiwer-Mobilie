@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { loadPius } from '../api/loadPius'
 import { deletePiu } from '../api/deletePiu'
 import { loadProfile } from '../api/loadProfile'
+import { loadUser } from '../api/loadUser'
 
 export default function feed({ navigation }) {
   const [pius, setPius] = useState({
@@ -18,8 +19,6 @@ export default function feed({ navigation }) {
     data: null,
     loaded: false,
   });
-
-
 
   const [usuarioID, setUsuarioID] = useState({
     data: null,
@@ -44,10 +43,6 @@ export default function feed({ navigation }) {
     data: null,
     loaded: false,
   });
-
-
-
-
 
   async function loadSearchList() {
     const searchList = await loadProfile(null);
@@ -74,21 +69,18 @@ export default function feed({ navigation }) {
       return Alert.alert('Usuário não encontrado!')
     }
     console.log(found)
-
-
   }
 
   async function loadPiusData(dadosUser, IDUser) {
     const pius = await loadPius();
     const followPius = [];
     const piuwersSeguidos =[]
+    console.log(dadosUser)
     piuwersSeguidos.push(parseInt(IDUser))
-    // console.log(dadosUser)
 
     //faz a lista de id das pessoas que o usuario segue
     await dadosUser.seguindo.forEach(following => {
       piuwersSeguidos.push(following.id)
-      console.log(piuwersSeguidos)
     })
 
     //filtra os pius de acordo com a lista que o user segue
@@ -99,7 +91,7 @@ export default function feed({ navigation }) {
     setPius({
       data: followPius,
       loaded: true,
-    });
+    });    
   }
   async function retrieveUser() {
     const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
@@ -128,12 +120,12 @@ export default function feed({ navigation }) {
   }
 
   async function getUserData() {
-    const userData = await loadProfile(usuarioID.data)
+    console.log("PASSOU AQUI")
+    const userData = await loadUser(usuarioID.data)
     setUserData({
       data: userData,
       loaded: true,
     });
-
   }
 
 
@@ -156,6 +148,26 @@ export default function feed({ navigation }) {
 
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null || userData.data == null) {
+      
+      // if (usuarioLogado.loaded){
+      //   console.log("O usuario logado foi carregado")
+      // }
+      // if (usuarioID.loaded){
+      //   console.log("O usuario foi carregado")
+      // }
+      // if (token.loaded){
+      //   console.log("O token foi carregado")
+      // }
+      // if (searchList.loaded){
+      //   console.log("A lista foi carregado")
+      // }
+      // if (userData.loaded){
+      //   console.log("Os dados foram carregado")
+      // }
+      // if (pius.loaded){
+      //   console.log("OS PIUS FORAM CARREGADOS")
+      // }
+
       if (!usuarioLogado.loaded) retrieveUser();
       if (!usuarioID.loaded) retrieveID();
       if (!token.loaded) retrieveToken();
