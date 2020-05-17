@@ -9,8 +9,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 
 export default function profile({ route, navigation }) {
-
-
     const [usuarioLogado, setUsuarioLogado] = useState({
         data: null,
         loaded: false,
@@ -24,6 +22,11 @@ export default function profile({ route, navigation }) {
     const [token, setToken] = useState({
         data: null,
         loaded: false,
+    });
+
+    const [userData, setUserData] = useState({
+        data: null,
+        loaded: false
     });
 
 
@@ -60,12 +63,7 @@ export default function profile({ route, navigation }) {
         loadPiusData()
     }
 
-    let [userData, setUserData] = useState({
-        data: null,
-        loaded: false
-    });
     const { id } = route.params
-    console.log(`User de ID ${id}`)
 
     async function loadUserData() {
         const userData = await loadProfile(id);
@@ -74,22 +72,9 @@ export default function profile({ route, navigation }) {
             data: userData,
             loaded: true,
         });
-        // userData.data.seguidores.forEach(seguidor => {
-        //     if (seguidor.username == usuarioLogado) { setUserData({ followed: true }) }
-
-        // });
 
 
     }
-
-
-
-
-    // console.log(userData.data)
-
-
-
-
 
     function viewUser() {
         if (userData.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null) {
@@ -97,11 +82,6 @@ export default function profile({ route, navigation }) {
             if (!usuarioLogado.loaded) retrieveUser();
             if (!usuarioID.loaded) retrieveID();
             if (!token.loaded) retrieveToken();
-
-
-
-            // console.log(userData.data)
-
             return (
                 <View style={{
                     flex: 1,
@@ -130,7 +110,6 @@ export default function profile({ route, navigation }) {
                 <>
                     <ProfileComponent id={id} logado_id={usuarioID.data} username={userData.data.username} first_name={userData.data.first_name} last_name={userData.data.last_name} foto={userData.data.foto} sobre={userData.data.sobre} pius={userData.data.last_name} foto={userData.data.foto} followStatus={followed} />
 
-
                     <FlatList
                         data={userData.data.pius}
                         renderItem={({ item }) => {
@@ -139,10 +118,7 @@ export default function profile({ route, navigation }) {
                             item.likers.forEach(liker => {
                                 if (liker.username == usuarioLogado.data) {
                                     liked = true;
-
-
                                 }
-
                             });
 
                             item.favoritado_por.forEach(favoritado_por => {
@@ -151,29 +127,16 @@ export default function profile({ route, navigation }) {
                                 }
                             });
 
-
-                            // Adiciona um novo piu, ou o Component SemPius, à lista:
                             return <PiuBox id={item.id} delete={deletePiuFuncoes} id_usuario={usuarioID.data} name={`${item.usuario.first_name} ${item.usuario.last_name}`} username={item.usuario.username} op_id={item.usuario.id} iconSource={item.usuario.foto} mensagem={item.texto} likeStatus={liked} counter={item.likers.length}  favoritadoStatus={favoritado} favoriteCounter={item.favoritado_por.length}  navigation={navigation} />
                         }}
                     />
                 </>
             );
-
-            // <FlatList
-            //     data={userData.data}
-            //     renderItem={({ item }) => {
-
-            //         // Adiciona um novo piu, ou o Component SemPius, à lista:
-            //         return 
-            //     }}
-            // />
-            // );
         }
     }
     return (
         <View style={{ flex: 1 }}>
             {viewUser()}
-
         </View>
     );
 

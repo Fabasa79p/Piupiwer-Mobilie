@@ -11,6 +11,9 @@ export default function PiuBox(props) {
     props.navigation.navigate('Profile', { id: props.op_id });
   }
 
+  function navigateToOwnProfile() {
+    props.navigation.navigate('OwnProfile', { id: props.op_id })
+  }
 
 
   const [usuarioLogado, setUsuario] = useState({ data: null, loaded: false })
@@ -71,9 +74,13 @@ export default function PiuBox(props) {
 
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
-      <TouchableOpacity onPress={() => navigateToProfile()}>
-        <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
-      </TouchableOpacity>
+        {props.username == usuarioLogado.data ?
+          <TouchableOpacity  onPress={() => navigateToOwnProfile()}>
+            <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
+          </TouchableOpacity>
+        :<TouchableOpacity  onPress={() => navigateToProfile()}>
+            <Image style={styles.iconStyle} source={{ uri: props.iconSource }} />
+          </TouchableOpacity>}
       <View style={styles.piuContent}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={styles.piuwerNome}>{props.name}</Text>

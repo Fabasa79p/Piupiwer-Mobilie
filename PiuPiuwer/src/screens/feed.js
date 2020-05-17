@@ -61,20 +61,20 @@ export default function feed({ navigation }) {
     navigation.navigate('Search', { termo: search })
   }
 
-  function searchHandler() {
-    let found = false
-    searchList.data.forEach(user => {
-      if (user.username == search) {
-        found = true;
-        navigateToSearch(user.id)
-      }
+  // function searchHandler() {
+  //   let found = false
+  //   searchList.data.forEach(user => {
+  //     if (user.username == search) {
+  //       found = true;
+  //       navigateToSearch(user.id)
+  //     }
 
-    });
-    if (!found) {
-      return Alert.alert('Usuário não encontrado!')
-    }
-    console.log(found)
-  }
+  //   });
+  //   if (!found) {
+  //     return Alert.alert('Usuário não encontrado!')
+  //   }
+  //   console.log(found)
+  // }
 
   async function loadPiusData(dadosUser, IDUser) {
     const pius = await loadPius();
@@ -138,8 +138,6 @@ export default function feed({ navigation }) {
     navigation.navigate('Profile', { id: usuarioID.data })
   }
 
-
-
   function navigateToOwnProfile() {
     navigation.navigate('OwnProfile', { id: usuarioID.data })
   }
@@ -166,27 +164,13 @@ export default function feed({ navigation }) {
     }, [])
   );
 
+  function navigateToLogin() {
+    navigation.navigate('Login')
+  }
+
+
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null || userData.data == null) {
-      
-      // if (usuarioLogado.loaded){
-      //   console.log("O usuario logado foi carregado")
-      // }
-      // if (usuarioID.loaded){
-      //   console.log("O usuario foi carregado")
-      // }
-      // if (token.loaded){
-      //   console.log("O token foi carregado")
-      // }
-      // if (searchList.loaded){
-      //   console.log("A lista foi carregado")
-      // }
-      // if (userData.loaded){
-      //   console.log("Os dados foram carregado")
-      // }
-      // if (pius.loaded){
-      //   console.log("OS PIUS FORAM CARREGADOS")
-      // }
 
       if (!usuarioLogado.loaded) retrieveUser();
       if (!usuarioID.loaded) retrieveID();
@@ -231,10 +215,10 @@ export default function feed({ navigation }) {
                 <Image style={styles.iconStyle} source={{ uri: userData.data.foto }} />
               </TouchableOpacity>
               <Menu visible={visible} onDismiss={_closeMenu} anchor={<TouchableOpacity onPress={_openMenu}><Image style={styles.moreOptions} source={require('../screens/img/moreoptions-icon.png')} /></TouchableOpacity>}>
-                <Menu.Item onPress={navigateToProfile} title='Meu Perfil' />
+                <Menu.Item onPress={() => { navigateToOwnProfile() }} title='Meu Perfil' />
                 <Menu.Item title='Ajuda' />
                 <Menu.Item title='Configurações' />
-                <Menu.Item title='Sair' />
+                <Menu.Item title='Sair' onPress={() => {  navigateToLogin() }}/>
               </Menu>
             </View>
           </View>
