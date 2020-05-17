@@ -9,6 +9,7 @@ import { loadPius } from '../api/loadPius'
 import { deletePiu } from '../api/deletePiu'
 import { loadProfile } from '../api/loadProfile'
 import { loadUser } from '../api/loadUser'
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function feed({ navigation }) {
   const [pius, setPius] = useState({
@@ -151,6 +152,19 @@ export default function feed({ navigation }) {
     await deletePiu(piuId)
     setPius(pius.data.filter(piu => piu.id != piuId))
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setPius({
+        data: null,
+        loaded: false,
+      });
+      setUserData({
+        data: null,
+        loaded: false,
+      });
+    }, [])
+  );
 
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null || userData.data == null) {

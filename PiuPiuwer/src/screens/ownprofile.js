@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, Text, StatusBar, Image, Button, TextInput, TouchableOpacity, Dimensions, FlatList } from 'react-native';
-import ProfileComponent from '../components/profile'
 import PiuBox from '../components/piu'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { loadProfile } from '../api/loadProfile'
