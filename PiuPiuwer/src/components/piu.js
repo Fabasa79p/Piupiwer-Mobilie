@@ -5,8 +5,8 @@ import { likePiu } from '../api/likePiu'
 import { favoritarPiu } from '../api/favoritarPiu'
 
 export default function PiuBox(props) {
-  // console.log(navigation)
 
+  //funções de navegação
   function navigateToProfile() {
     props.navigation.navigate('Profile', { id: props.op_id });
   }
@@ -17,11 +17,12 @@ export default function PiuBox(props) {
 
 
   const [usuarioLogado, setUsuario] = useState({ data: null, loaded: false })
+
+  //recupera o usuario
   async function getUsuario() {
     const value = await AsyncStorage.getItem('usuarioLogado');
     setUsuario({ data: value, loaded: true });
   }
-
   if (usuarioLogado.data == null) {
     getUsuario()
   }
@@ -70,8 +71,10 @@ export default function PiuBox(props) {
     toggleFavorite();
   }
 
+  //função para deletar o piu
   let deletePiu = props.delete
 
+  //componente piu
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
         {props.username == usuarioLogado.data ?

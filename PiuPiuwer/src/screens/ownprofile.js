@@ -23,7 +23,12 @@ export default function ownProfile({ route, navigation }) {
         loaded: false,
     });
 
+    const [userData, setUserData] = useState({
+        data: null,
+        loaded: false
+    });
 
+    //recupera u username
     async function retrieveUser() {
         const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
         // console.log(usuarioLogado)
@@ -33,6 +38,7 @@ export default function ownProfile({ route, navigation }) {
         });
     }
 
+    //recupera o id
     async function retrieveID() {
         const usuarioID = await AsyncStorage.getItem('idUsuario');
         // console.log(usuarioID)
@@ -42,6 +48,7 @@ export default function ownProfile({ route, navigation }) {
         });
     }
 
+    //recupera o token
     async function retrieveToken() {
         const token = await AsyncStorage.getItem('token');
         // console.log(token)
@@ -51,13 +58,10 @@ export default function ownProfile({ route, navigation }) {
         });
     }
 
-    let [userData, setUserData] = useState({
-        data: null,
-        loaded: false
-    });
+    
     const { id } = route.params
-    console.log(`User de ID ${id}`)
 
+    //carrega os dados do usuario
     async function loadUserData() {
         const userData = await loadProfile(id);
         console.log(userData)
@@ -67,11 +71,13 @@ export default function ownProfile({ route, navigation }) {
         });
     }
 
+    //função para deletar piu
     async function deletePiuFuncoes(piuId) {
         await deletePiu(piuId)
         loadUserData()
     }
 
+    //aba de navegação para os proprios pius
     const FirstRoute = () => (
         <FlatList
                data={userData.data.pius}
@@ -95,7 +101,8 @@ export default function ownProfile({ route, navigation }) {
                }}
            />
     );
-
+    
+    //aba de navegção para os pous favoritados
     const SecondRoute = () => (
         <FlatList
                data={userData.data.favoritos}
@@ -120,8 +127,10 @@ export default function ownProfile({ route, navigation }) {
            />
     );
     
-    const initialLayout = { backgroundColor: 'hsla(207, 60%, 44%, 0.85)', width: Dimensions.get('window').width, };
+    const initialLayout = {width: Dimensions.get('window').width, };
+    
 
+    //função que carrega o conteudo da pagina caso todos os dados tenham sido carregados
     function viewUser() {
         const [index, setIndex] = React.useState(0);
         const [routes] = React.useState([

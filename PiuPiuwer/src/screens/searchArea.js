@@ -8,13 +8,15 @@ import LinearGradient from 'react-native-linear-gradient';
 
 
 export default function searchArea({route, navigation}) {
+
     let [resultados, setResultados] = useState({
         data: null,
         loaded: false
     });
-    const { termo } = route.params
-    // console.log(`Termo ${termo}`)
 
+    const { termo } = route.params
+
+    //recebe resposta da API para o termo procurado
     async function loadResultados() {
         console.log(termo)
         const resultadosBusca = await searchTerm(termo)
@@ -23,7 +25,8 @@ export default function searchArea({route, navigation}) {
           loaded: true,
         });
     }
-      
+
+    //conteudo da pagina caso ja tenha recebido resposta da API  
     function viewUser() {
         if (!resultados.loaded) {
             loadResultados();

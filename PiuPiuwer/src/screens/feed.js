@@ -45,6 +45,12 @@ export default function feed({ navigation }) {
     loaded: false,
   });
 
+  const [visible, setVisible] = useState(false)
+  const _openMenu = () => setVisible(true);
+  const _closeMenu = () => setVisible(false);
+
+  const [piuConteudo, setPiu] = useState('');
+
   async function loadSearchList() {
     const searchList = await loadProfile(null);
     setSearchList({
@@ -52,14 +58,10 @@ export default function feed({ navigation }) {
       loaded: true,
     });
   }
-
+  
   // function navigateToSearch(id) {
   //   navigation.navigate('Profile', { id: id });
   // }
-
-  function navigateToSearch(search) {
-    navigation.navigate('Search', { termo: search })
-  }
 
   // function searchHandler() {
   //   let found = false
@@ -76,6 +78,7 @@ export default function feed({ navigation }) {
   //   console.log(found)
   // }
 
+  //função para pegar os pius e filrar por seguidor
   async function loadPiusData(dadosUser, IDUser) {
     const pius = await loadPius();
     const followPius = [];
@@ -98,6 +101,8 @@ export default function feed({ navigation }) {
       loaded: true,
     });    
   }
+
+  //recupera o username do usuario
   async function retrieveUser() {
     const usuarioLogado = await AsyncStorage.getItem('usuarioLogado');
     setUsuarioLogado({
@@ -106,7 +111,7 @@ export default function feed({ navigation }) {
     });
   }
 
-
+  //recupera o id do usuario
   async function retrieveID() {
     const usuarioID = await AsyncStorage.getItem('idUsuario');
     setUsuarioID({
@@ -115,17 +120,17 @@ export default function feed({ navigation }) {
     });
   }
 
+  //recupera o token
   async function retrieveToken() {
     const token = await AsyncStorage.getItem('token');
-    // console.log(token)
     setToken({
       data: token,
       loaded: true,
     });
   }
 
+  //pega as informações do usuario
   async function getUserData() {
-    console.log("PASSOU AQUI")
     const userData = await loadUser(usuarioID.data)
     setUserData({
       data: userData,
@@ -133,7 +138,7 @@ export default function feed({ navigation }) {
     });
   }
 
-
+  //funções de navegação
   function navigateToProfile() {
     navigation.navigate('Profile', { id: usuarioID.data })
   }
@@ -141,16 +146,24 @@ export default function feed({ navigation }) {
   function navigateToOwnProfile() {
     navigation.navigate('OwnProfile', { id: usuarioID.data })
   }
-  const [visible, setVisible] = useState(false)
-  const _openMenu = () => setVisible(true);
-  const _closeMenu = () => setVisible(false);
-  const [piuConteudo, setPiu] = useState('');
 
+  function navigateToSearch(search) {
+    navigation.navigate('Search', { termo: search })
+  }
+
+  function navigateToLogin() {
+    navigation.navigate('Login')
+  }
+  
+
+  //função para deletar piu e atualizar o feed
   async function deletePiuFuncoes(piuId) {
     await deletePiu(piuId)
     setPius(pius.data.filter(piu => piu.id != piuId))
   }
 
+
+  //função para recarregar a pagina
   useFocusEffect(
     React.useCallback(() => {
       setPius({
@@ -164,11 +177,9 @@ export default function feed({ navigation }) {
     }, [])
   );
 
-  function navigateToLogin() {
-    navigation.navigate('Login')
-  }
+  
 
-
+  //função para carregar a pagina, caso todos os dados tenham sido carregados
   function piusArea() {
     if (pius.data == null || usuarioLogado.data == null || usuarioID.data == null || token.data == null || searchList.data == null || userData.data == null) {
 
@@ -188,12 +199,10 @@ export default function feed({ navigation }) {
 
         }}
         >
-          {/* <Image style={styles.loadStyle} source={require('./img/logo.png')} /> */}
 
           <Text style={{
             fontSize: 20,
             color: '#777',
-            // padding: 30,
           }}
           >
             Carregando pius...
@@ -223,8 +232,6 @@ export default function feed({ navigation }) {
             </View>
           </View>
 
-          {/* <Navbar/> */}
-
           {/* conteudo da pag */}
 
           {/* novo piu */}
@@ -244,6 +251,7 @@ export default function feed({ navigation }) {
             </View>
           </View>
 
+          {/* lista de pius */}
           <FlatList
             data={pius.data}
             renderItem={({ item }) => {
@@ -269,6 +277,7 @@ export default function feed({ navigation }) {
     );
   }
 
+  //função para cirar novo piu e atualizar o feed
   async function novoPiuFuncoes(piuConteudo) {
     const novoPiu = await newPiu(piuConteudo)
     setPius([...pius.data, novoPiu])

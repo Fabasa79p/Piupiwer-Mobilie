@@ -39,15 +39,19 @@ async function getUser(user) {
     // Decodifica os dados para o formato json:
     let dados = await response.json();
 
-    // Imprime os dados obtidos
-    console.log(dados);
+    // // Imprime os dados obtidos
+    // console.log(dados);
 
     //chama função que salva o user
     for (i = 0; i < dados.length; i++) {
       if (dados[i].username == userProcurado) {
+        console.log("É igual")
         return dados[i]
       }
     }
+    return (userProcurado)
+
+
   } catch (error) {
     // Caso haja algum erro, imprima-o e retorne o erro:
     console.error(error);
@@ -88,12 +92,14 @@ export async function LogIn(user, senha, { navigation }) {
 
     // Decodifica os dados para o formato json:
     let data = await response.json();
-    // Imprime os dados obtidos:
-    // console.log(data);
 
     //se não tem erro chama a funcao que guarda o usuario, guarda o token e faz a navergação pro feed
     if (Object.keys(data).includes('token')) {
       dadosUsuario = await getUser(user)
+      if(dadosUsuario.username != user){
+        Alert.alert("Usuário ou senha incorretos. Tente Novamente.")
+        return
+      }
       // console.log(dadosUsuario)
       await storeToken(data.token)
       await storeUser(dadosUsuario.username, dadosUsuario.id.toString())

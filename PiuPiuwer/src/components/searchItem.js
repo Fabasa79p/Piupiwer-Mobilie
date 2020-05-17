@@ -3,12 +3,12 @@ import { StyleSheet, ScrollView, View, Text, Image, Button, TextInput, Touchable
 import AsyncStorage from '@react-native-community/async-storage'
 
 export default function SearchItem(props) {
-
+  //função de navegação
   function navigateToProfile() {
     props.navigation.navigate('Profile', { id: props.id });
   }
-  console.log("OIIIIIII")
 
+  //componente item de navegação
   return <View style={styles.PiuContainer}>
     <View style={{ flexDirection: 'row', flex: 1 }}>
       <TouchableOpacity onPress={() => navigateToProfile()}>

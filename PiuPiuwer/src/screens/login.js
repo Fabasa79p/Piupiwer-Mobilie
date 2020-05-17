@@ -4,12 +4,17 @@ import LinearGradient from 'react-native-linear-gradient';
 import { LogIn } from '../api/logintry'
 
 export default function login({ navigation }) {
+
+    //função de navegação
     function navigateToSingup() {
         navigation.navigate('Signup');
     }
+
+
     const [user, setUser] = useState('');
     const [senha, setSenha] = useState('');
 
+    //conteudo da pagina
     return <LinearGradient style={{flex:1}} colors={['#ffffff', 'hsla(207, 55%, 62%, 0.2)', 'hsla(207, 55%, 62%, 0.4)']} >
         <View style={styles.headerStyle}>
             <Image style={styles.logoStyle} source={require('./img/logo.png')} />
